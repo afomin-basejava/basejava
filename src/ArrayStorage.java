@@ -4,9 +4,9 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
+    static final int CAPACITY = 4;
     static int size = 0;
-    static int capacity = 4;
-    Resume[] storage = new Resume[capacity];
+    Resume[] storage = new Resume[CAPACITY];
 
     void clear() {
         for (int i = 0; i < size; i++) {
@@ -16,7 +16,7 @@ public class ArrayStorage {
     }
 
     void save(Resume r) {
-        if (size < capacity) {
+        if (size < CAPACITY) {
             storage[size++] = r;
         } else {
             System.out.println("ArrayStorage: save attempt -" + r + "- out of storage memory limit!");
@@ -24,19 +24,19 @@ public class ArrayStorage {
     }
 
     Resume get(String uuid) {
-        for (Resume resume : getAll()) {
-            if (resume.uuid == uuid) {
-                return resume;
+        for (int resume = 0; resume < size; resume++) {
+            if (storage[resume].uuid.equals(uuid)) {
+                return storage[resume];
             }
         }
-        return getDummyResume(uuid);
+        return null;
     }
 
-    Resume getDummyResume(String uuid) {
-        Resume dummyResume = new Resume();
-        dummyResume.uuid = uuid + " - doesn't exist!";
-        return dummyResume;
-    }
+//    Resume getDummyResume(String uuid) {
+//        Resume dummyResume = new Resume();
+//        dummyResume.uuid = uuid + " - doesn't exist!";
+//        return dummyResume;
+//    }
 
     void delete(String uuid) {
         for (int i = 0; i < size; i++) {
