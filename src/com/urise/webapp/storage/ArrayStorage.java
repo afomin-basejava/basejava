@@ -1,3 +1,7 @@
+package com.urise.webapp.storage;
+
+import com.urise.webapp.model.Resume;
+
 import java.util.Arrays;
 
 /**
@@ -8,39 +12,39 @@ public class ArrayStorage {
     private static int size = 0;
     private Resume[] storage = new Resume[CAPACITY];
 
-    void clear() {
+    public void clear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
-    void save(Resume r) {
+    public void save(Resume r) {
         if (size < CAPACITY) {
             if (indexOf(r.getUuid()) < 0) {
                 storage[size++] = r;
             } else {
-                System.out.println("Resume " + r.getUuid() + " duplicate doesn't allowed!");
+                System.out.println("com.urise.webapp.model.Resume " + r.getUuid() + " duplicate doesn't allowed!");
             }
         } else {
-            System.out.println("ArrayStorage: save attempt -" + r + "- out of storage memory limit!");
+            System.out.println("com.urise.webapp.storage.ArrayStorage: save attempt -" + r + "- out of storage memory limit!");
         }
     }
 
-    Resume get(String uuid) {
+    public Resume get(String uuid) {
         int index = indexOf(uuid);
         if (index >= 0) {
             return storage[index];
         }
-        System.out.println("Resume " + uuid + " doesn't exist!");
+        System.out.println("com.urise.webapp.model.Resume " + uuid + " doesn't exist!");
         return null;
     }
 
-//    Resume getDummyResume(String uuid) {
-//        Resume dummyResume = new Resume();
+//    com.urise.webapp.model.Resume getDummyResume(String uuid) {
+//        com.urise.webapp.model.Resume dummyResume = new com.urise.webapp.model.Resume();
 //        dummyResume.uuid = uuid + " - doesn't exist!";
 //        return dummyResume;
 //    }
 
-    void delete(String uuid) {
+    public void delete(String uuid) {
         int index = indexOf(uuid);
         if (index >= 0) {
             for (int j = index; j < size - 1; j ++) {
@@ -49,18 +53,18 @@ public class ArrayStorage {
             storage[size - 1] = null;
             size--;
         } else {
-            System.out.println("Resume " + uuid + " doesn't exist - deletion impossible!");
+            System.out.println("com.urise.webapp.model.Resume " + uuid + " doesn't exist - deletion impossible!");
         }
     }
 
-    void update(Resume resume) {
+    public void update(Resume resume) {
         int index = indexOf(resume.getUuid());
         if (index >= 0) {
             // TODO update
             resume.setUuid(resume.getUuid());
             storage[index] = resume;
         } else {
-            System.out.println("Resume " + resume.getUuid() + " doesn't exist - update impossible!");
+            System.out.println("com.urise.webapp.model.Resume " + resume.getUuid() + " doesn't exist - update impossible!");
         }
     }
 
@@ -76,11 +80,11 @@ public class ArrayStorage {
     /**
      * @return array, contains only Resumes in storage (without null)
      */
-    Resume[] getAll() {
+    public Resume[] getAll() {
         return Arrays.copyOf(storage, size);
     }
 
-    int size() {
+    public int size() {
         return size;
     }
 }
