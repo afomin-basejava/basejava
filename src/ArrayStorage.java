@@ -4,31 +4,33 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    static final int CAPACITY = 4;
-    static int size = 0;
-    Resume[] storage = new Resume[CAPACITY];
+    private static final int CAPACITY = 4;
+    private static int size = 0;
+    private Resume[] storage = new Resume[CAPACITY];
 
     void clear() {
-        for (int i = 0; i < size; i++) {
-            storage[i] = null;
-        }
+        Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
     void save(Resume r) {
         if (size < CAPACITY) {
-            storage[size++] = r;
+            if (indexOf(r.getUuid()) >= 0) {
+                storage[size++] = r;
+            } else {
+                System.out.println("Resume " + r.getUuid() + " duplicate doesn't allowed!");
+            }
         } else {
             System.out.println("ArrayStorage: save attempt -" + r + "- out of storage memory limit!");
         }
     }
 
     Resume get(String uuid) {
-        for (int resume = 0; resume < size; resume++) {
-            if (storage[resume].uuid.equals(uuid)) {
-                return storage[resume];
-            }
+        int index = indexOf(uuid);
+        if (index >= 0) {
+            return storage[index];
         }
+        System.out.println("Resume " + uuid + " doesn't exist!");
         return null;
     }
 
@@ -39,16 +41,23 @@ public class ArrayStorage {
 //    }
 
     void delete(String uuid) {
+        int index = indexOf(uuid);
+        if (index >= 0) {
+            for (int j = index; j < size - 1; j ++) {
+                storage[j] = storage[j + 1];
+            }
+            storage[size - 1] = null;
+            size--;
+        }
+    }
+
+    private int indexOf(String uuid) {
         for (int i = 0; i < size; i++) {
-            if (storage[i].uuid.equals(uuid)) {
-                for (int j = i; j < size - 1; j ++) {
-                    storage[j] = storage[j + 1];
-                }
-                storage[size - 1] = null;
-                size--;
-                break;
+            if (storage[i].getUuid().equals(uuid)) {
+                return i;
             }
         }
+        return -1;
     }
 
     /**
