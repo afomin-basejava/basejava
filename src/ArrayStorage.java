@@ -15,7 +15,7 @@ public class ArrayStorage {
 
     void save(Resume r) {
         if (size < CAPACITY) {
-            if (indexOf(r.getUuid()) >= 0) {
+            if (indexOf(r.getUuid()) < 0) {
                 storage[size++] = r;
             } else {
                 System.out.println("Resume " + r.getUuid() + " duplicate doesn't allowed!");
@@ -48,6 +48,19 @@ public class ArrayStorage {
             }
             storage[size - 1] = null;
             size--;
+        } else {
+            System.out.println("Resume " + uuid + " doesn't exist - deletion impossible!");
+        }
+    }
+
+    void update(Resume resume) {
+        int index = indexOf(resume.getUuid());
+        if (index >= 0) {
+            // TODO update
+            resume.setUuid(resume.getUuid());
+            storage[index] = resume;
+        } else {
+            System.out.println("Resume " + resume.getUuid() + " doesn't exist - update impossible!");
         }
     }
 
