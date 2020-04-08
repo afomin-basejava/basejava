@@ -1,3 +1,5 @@
+package com.urise.webapp;
+
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.storage.ArrayStorage;
 
@@ -46,11 +48,15 @@ public class MainArray {
                     printAll();
                     break;
                 case "delete":
-                    ARRAY_STORAGE.delete(uuid);
+                    r = new Resume();
+                    r.setUuid(uuid);
+                    ARRAY_STORAGE.delete(r);
                     printAll();
                     break;
                 case "get":
-                    System.out.println(ARRAY_STORAGE.get(uuid));
+                    r = new Resume();
+                    r.setUuid(uuid);
+                    System.out.println(ARRAY_STORAGE.get(r));
                     break;
                 case "clear":
                     ARRAY_STORAGE.clear();
