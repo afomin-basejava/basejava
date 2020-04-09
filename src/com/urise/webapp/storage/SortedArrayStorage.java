@@ -6,11 +6,6 @@ import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
 
-    static void insert(Resume[] storage, Resume resume, int insertPoint) {
-        System.arraycopy(storage, insertPoint, storage, insertPoint + 1, AbstractArrayStorage.size - insertPoint);
-        storage[insertPoint] = resume;
-    }
-
     @Override
     public void save(Resume resume) {
         if (size < CAPACITY) {
@@ -21,7 +16,8 @@ public class SortedArrayStorage extends AbstractArrayStorage {
                 return;
             }
             if (!storage[insertPoint].getUuid().equals(resume.getUuid())) {
-                insert(storage, resume, insertPoint);
+                System.arraycopy(storage, insertPoint, storage, insertPoint + 1, AbstractArrayStorage.size - insertPoint);
+                storage[insertPoint] = resume;
                 size++;
             } else {
                 System.out.println("Resume " + resume.getUuid() + " duplicate doesn't allowed!");
@@ -37,6 +33,9 @@ public class SortedArrayStorage extends AbstractArrayStorage {
         if (storage[index] != null) {
             if (storage[index].getUuid().equals(resume.getUuid())) {
                 return storage[index];
+            }
+            else {
+                System.out.println("Resume " + resume.getUuid() + " doesn't exist!");
             }
         } else {
             System.out.println("Resume " + resume.getUuid() + " doesn't exist!");
@@ -55,6 +54,9 @@ public class SortedArrayStorage extends AbstractArrayStorage {
                 storage[size - 1] = null;
                 size--;
             }
+            else {
+                System.out.println("Resume " + resume.getUuid() + " doesn't exist - deletion impossible!");
+            }
         } else {
             System.out.println("Resume " + resume.getUuid() + " doesn't exist - deletion impossible!");
         }
@@ -66,6 +68,9 @@ public class SortedArrayStorage extends AbstractArrayStorage {
         if (storage[index] != null) {
             if (storage[index].getUuid().equals(resume.getUuid())) {
                 storage[index] = resume;
+            }
+            else {
+                System.out.println("Resume " + resume.getUuid() + " doesn't exist - update impossible!");
             }
         } else {
             System.out.println("Resume " + resume.getUuid() + " doesn't exist - update impossible!");
