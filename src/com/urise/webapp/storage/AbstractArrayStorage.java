@@ -20,7 +20,7 @@ public abstract class AbstractArrayStorage implements Storage{
             if (index >= 0) {
                 System.out.println("Resume " + resume.getUuid() + " duplicate doesn't allowed!");
             } else {
-                insertResumeIntoStorage(resume, index);
+                saveResume(resume, index);
                 size++;
             }
         } else {
@@ -41,7 +41,7 @@ public abstract class AbstractArrayStorage implements Storage{
         int index = indexOf(resume);
         if (index >= 0) {
             if (size - 1 - index >= 0) {
-                deleteResumeFromStorage(resume, index);
+                deleteResume(resume, index);
             }
             storage[size - 1] = null;
             size--;
@@ -69,8 +69,8 @@ public abstract class AbstractArrayStorage implements Storage{
 
     public abstract int indexOf(Resume resume);
 
-    protected abstract void insertResumeIntoStorage(Resume resume, int insertPoint);
+    protected abstract void saveResume(Resume resume, int insertPoint);
 
-    protected abstract void deleteResumeFromStorage(Resume resume, int insertPoint);
+    protected abstract void deleteResume(Resume resume, int insertPoint);
 
 }
