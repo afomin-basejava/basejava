@@ -20,7 +20,7 @@ public abstract class AbstractArrayStorage implements Storage{
             if (index >= 0) {
                 System.out.println("Resume " + resume.getUuid() + " duplicate doesn't allowed!");
             } else {
-                insertResumeIntoStorage(storage, resume, index);
+                insertResumeIntoStorage(resume, index);
                 size++;
             }
         } else {
@@ -41,7 +41,7 @@ public abstract class AbstractArrayStorage implements Storage{
         int index = indexOf(resume);
         if (index >= 0) {
             if (size - 1 - index >= 0) {
-                System.arraycopy(storage, index + 1, storage, index, size - 1 - index);
+                deleteResumeFromStorage(resume, index);
             }
             storage[size - 1] = null;
             size--;
@@ -53,9 +53,7 @@ public abstract class AbstractArrayStorage implements Storage{
     public void update(Resume resume) {
         int index = indexOf(resume);
         if (index >= 0) {
-            if (storage[index].getUuid().equals(resume.getUuid())) {
                 storage[index] = resume;
-            }
         } else {
             System.out.println("Resume " + resume.getUuid() + " doesn't exist - update impossible!");
         }
@@ -71,6 +69,8 @@ public abstract class AbstractArrayStorage implements Storage{
 
     public abstract int indexOf(Resume resume);
 
-    protected abstract void insertResumeIntoStorage(Resume[] storage, Resume resume, int insertPoint);
+    protected abstract void insertResumeIntoStorage(Resume resume, int insertPoint);
+
+    protected abstract void deleteResumeFromStorage(Resume resume, int insertPoint);
 
 }

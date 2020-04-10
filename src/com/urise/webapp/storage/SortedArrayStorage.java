@@ -8,17 +8,18 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     public int indexOf(Resume resume) {
-        int insertPoint = binarySearch(storage, 0, size(), resume);
-//        if (insertPoint < 0) {
-//            insertPoint = -insertPoint - 1;
-//        }
-        return insertPoint;
+        return binarySearch(storage, 0, size(), resume);
     }
 
     @Override
-    protected void insertResumeIntoStorage(Resume[] storage, Resume resume, int index) {
+    protected void insertResumeIntoStorage(Resume resume, int index) {
         int insertPoint = -index - 1;
         System.arraycopy(storage, insertPoint, storage, insertPoint + 1,size() - insertPoint);
         storage[insertPoint] = resume;
+    }
+
+    @Override
+    protected void deleteResumeFromStorage(Resume resume, int index) {
+        System.arraycopy(storage, index + 1, storage, index, size - 1 - index);
     }
 }
