@@ -25,9 +25,12 @@ public class MainArray {
             ARRAY_STORAGE = new ArrayStorage();
             System.out.println("accessType = " + accessType + " - " + ARRAY_STORAGE.getClass().getName());
         }
-        else {
+        else if (accessType == 2) {
             ARRAY_STORAGE = new SortedArrayStorage();
             System.out.println("accessType = " + accessType + " - " + ARRAY_STORAGE.getClass().getName());
+        } else {
+            ARRAY_STORAGE = new ArrayStorage();
+            System.out.println("Default accessType = " + ARRAY_STORAGE.getClass().getName());
         }
     }
 
