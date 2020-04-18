@@ -1,5 +1,8 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.exception.ExistStorageException;
+import com.urise.webapp.exception.NotExistStorageException;
+import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -18,21 +21,20 @@ public abstract class AbstractArrayStorage implements Storage{
         if (size < CAPACITY) {
             int index = indexOf(resume);
             if (index >= 0) {
-                System.out.println("Resume " + resume.getUuid() + " duplicate doesn't allowed!");
+                throw new ExistStorageException("Resume already exist:", resume);
             } else {
                 saveResume(resume, index);
                 size++;
             }
         } else {
-            System.out.println("Resume: save attempt -" + resume + "- out of storage memory limit!");
+            throw new StorageException("Storage overflow to save resume", resume);
         }
     }
 
     public Resume get(Resume resume) {
         int index = indexOf(resume);
         if (index < 0) {
-            System.out.println("Resume " + resume.getUuid() + " doesn't exist!");
-            return null;
+            throw new NotExistStorageException("Resume doesn't exist!", resume);
         }
         return storage[index];
     }
@@ -46,7 +48,7 @@ public abstract class AbstractArrayStorage implements Storage{
             storage[size - 1] = null;
             size--;
         } else {
-            System.out.println("Resume " + resume.getUuid() + " doesn't exist - deletion impossible!");
+            throw new NotExistStorageException("Resume doesn't exist!", resume);
         }
     }
 
@@ -55,7 +57,7 @@ public abstract class AbstractArrayStorage implements Storage{
         if (index >= 0) {
                 storage[index] = resume;
         } else {
-            System.out.println("Resume " + resume.getUuid() + " doesn't exist - update impossible!");
+            throw new NotExistStorageException("Resume doesn't exist!", resume);
         }
     }
 
