@@ -3,7 +3,7 @@ package com.urise.webapp.storage;
 import com.urise.webapp.model.Resume;
 
 public interface Storage {
-    int CAPACITY = 4;
+//    int CAPACITY = 4;
 
     void clear();
 
