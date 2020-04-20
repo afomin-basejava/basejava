@@ -21,7 +21,7 @@ public abstract class AbstractArrayStorage implements Storage{
         if (size < CAPACITY) {
             int index = indexOf(resume);
             if (index >= 0) {
-                throw new ExistStorageException("Resume already exist:", resume);
+                throw new ExistStorageException(resume);
             } else {
                 saveResume(resume, index);
                 size++;
@@ -34,7 +34,7 @@ public abstract class AbstractArrayStorage implements Storage{
     public Resume get(Resume resume) {
         int index = indexOf(resume);
         if (index < 0) {
-            throw new NotExistStorageException("Resume doesn't exist!", resume);
+            throw new NotExistStorageException(resume);
         }
         return storage[index];
     }
@@ -48,7 +48,7 @@ public abstract class AbstractArrayStorage implements Storage{
             storage[size - 1] = null;
             size--;
         } else {
-            throw new NotExistStorageException("Resume doesn't exist!", resume);
+            throw new NotExistStorageException(resume);
         }
     }
 
@@ -57,7 +57,7 @@ public abstract class AbstractArrayStorage implements Storage{
         if (index >= 0) {
                 storage[index] = resume;
         } else {
-            throw new NotExistStorageException("Resume doesn't exist!", resume);
+            throw new NotExistStorageException(resume);
         }
     }
 

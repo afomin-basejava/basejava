@@ -7,15 +7,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Random;
 import java.util.UUID;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 public abstract class AbstractArrayStorageTest {
-    static final int CAPACITY = 4;
-    protected final Storage storage;
-    protected  Resume resume = new Resume("uuid1");
+    private final Storage storage;
+    private  Resume resume = new Resume("uuid1");
 
     protected AbstractArrayStorageTest(Class storageType) throws IllegalAccessException, InstantiationException {
        storage = (Storage) storageType.newInstance();
@@ -47,7 +47,7 @@ public abstract class AbstractArrayStorageTest {
 
     @Test(expected = StorageException.class)
     public void testSaveStorageException() {
-        while (storage.size() < CAPACITY) {
+        while (storage.size() < Storage.CAPACITY) {
             storage.save(new Resume());
         }
         storage.save(new Resume());
@@ -55,8 +55,8 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void testGet() {
-        Resume testResume = storage.get(resume);
-        assertEquals(resume, testResume);
+        Resume resumeForTest = storage.get(resume);
+        assertEquals(resume, resumeForTest);
     }
     @Test(expected = NotExistStorageException.class)
     public void testGetWithException() {
@@ -79,10 +79,10 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void testUpdate() {
-        String uuid = resume.getUuid();
-        storage.update(resume);
-        String uuidafterupdate = storage.get(resume).getUuid();
-        assertSame(uuidafterupdate, uuid);
+        Resume resumeForUpdate = resume;
+        storage.update(resumeForUpdate);
+        resume = storage.get(resumeForUpdate);
+        assertEquals(resumeForUpdate, resume);
     }
 
     @Test(expected = RuntimeException.class)
@@ -94,12 +94,23 @@ public abstract class AbstractArrayStorageTest {
     public void testGetAll() {
         Resume[] resumes = storage.getAll();
         assertArrayEquals(resumes, storage.getAll());
-        assertEquals(resumes.length, storage.size());
+        assertEquals(resumes.length, 3);
+
+        storage.clear();
+        int limit = new Random().nextInt(Storage.CAPACITY);
+        resumes = new Resume[limit];
+        for (int i = 0; i < limit; i++) {
+            resumes[i] = new Resume("uuid_" + i);
+            storage.save(resumes[i]);
+        }
+        Resume[] resumesFromStorage = storage.getAll();
+        assertArrayEquals(resumesFromStorage, resumes);
+        assertEquals(resumesFromStorage.length, storage.size());
     }
 
     @Test
     public void testSize() {
-        int size = storage.size();
+        assertEquals(storage.size(), 3);
     }
 
 
