@@ -11,12 +11,12 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.UUID;
 
-import static com.urise.webapp.storage.AbstractStorage.CAPACITY;
+import static com.urise.webapp.storage.AbstractArrayStorage.CAPACITY;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 public abstract class AbstractArrayStorageTest {
-//    private static final int CAPACITY = 5;
+    private static final int ARRAY_CAPACITY = CAPACITY;
     private final Storage storage;
     private  Resume resume = new Resume("uuid1");
 
@@ -50,7 +50,7 @@ public abstract class AbstractArrayStorageTest {
 
     @Test(expected = StorageException.class)
     public void testSaveStorageException() {
-        while (storage.size() < CAPACITY) {
+        while (storage.size() < ARRAY_CAPACITY) {
             storage.save(new Resume());
         }
         storage.save(new Resume());
@@ -96,14 +96,14 @@ public abstract class AbstractArrayStorageTest {
     @Test
     public void testGetAll() {
         storage.clear();
-        int limit = new Random().nextInt(CAPACITY);
-        Resume[] resumes = new Resume[limit];
+        int limit = new Random().nextInt(ARRAY_CAPACITY);
+        Resume[] initial = new Resume[limit];
         for (int i = 0; i < limit; i++) {
-            resumes[i] = new Resume("uuid_" + i);
-            storage.save(resumes[i]);
+            initial[i] = new Resume("uuid_" + i);
+            storage.save(initial[i]);
         }
         Resume[] resumesFromStorage = storage.getAll();
-        assertTrue(Arrays.asList(resumes).containsAll(Arrays.asList(resumesFromStorage)));
+        assertTrue(Arrays.asList(initial).containsAll(Arrays.asList(resumesFromStorage)));
         assertEquals(resumesFromStorage.length, storage.size());
     }
 

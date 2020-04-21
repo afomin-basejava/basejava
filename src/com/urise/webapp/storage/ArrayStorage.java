@@ -9,7 +9,7 @@ public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
     public int indexOf(Resume resume) {
-        for (int i = 0; i < size(); i++) {
+        for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(resume.getUuid())) {
                 return i;
             }
@@ -26,5 +26,4 @@ public class ArrayStorage extends AbstractArrayStorage {
     protected void deleteResume(Resume resume, int index) {
         storage[index] = storage[size - 1];
     }
-
 }
