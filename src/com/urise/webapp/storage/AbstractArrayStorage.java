@@ -17,47 +17,48 @@ public abstract class AbstractArrayStorage implements Storage{
         size = 0;
     }
 
-    public void save(Resume resume) {
+    public void save(String uuid) {
         if (size < CAPACITY) {
-            int index = indexOf(resume);
+            int index = indexOf(uuid);
             if (index >= 0) {
-                throw new ExistStorageException(resume);
+                throw new ExistStorageException(uuid);
             } else {
+                Resume resume = new Resume(uuid);
                 saveResume(resume, index);
                 size++;
             }
         } else {
-            throw new StorageException("Storage overflow to save resume", resume);
+            throw new StorageException("Storage overflow to save resume", uuid);
         }
     }
 
-    public Resume get(Resume resume) {
-        int index = indexOf(resume);
+    public Resume get(String uuid) {
+        int index = indexOf(uuid);
         if (index < 0) {
-            throw new NotExistStorageException(resume);
+            throw new NotExistStorageException(uuid);
         }
         return storage[index];
     }
 
-    public void delete(Resume resume) {
-        int index = indexOf(resume);
+    public void delete(String uuid) {
+        int index = indexOf(uuid);
         if (index >= 0) {
             if (size - 1 - index >= 0) {
-                deleteResume(resume, index);
+                deleteResume(index);
             }
             storage[size - 1] = null;
             size--;
         } else {
-            throw new NotExistStorageException(resume);
+            throw new NotExistStorageException(uuid);
         }
     }
 
     public void update(Resume resume) {
-        int index = indexOf(resume);
+        int index = indexOf(resume.getUuid());
         if (index >= 0) {
                 storage[index] = resume;
         } else {
-            throw new NotExistStorageException(resume);
+            throw new NotExistStorageException(resume.getUuid());
         }
     }
 
@@ -69,10 +70,10 @@ public abstract class AbstractArrayStorage implements Storage{
         return size;
     }
 
-    public abstract int indexOf(Resume resume);
+    protected abstract int indexOf(String uuid);
 
-    protected abstract void saveResume(Resume resume, int insertPoint);
+    protected abstract void saveResume(Resume resume, int index);
 
-    protected abstract void deleteResume(Resume resume, int insertPoint);
+    protected abstract void deleteResume(int index);
 
 }
