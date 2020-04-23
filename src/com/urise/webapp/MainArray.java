@@ -55,7 +55,7 @@ public class MainArray {
                     System.out.println(ARRAY_STORAGE.size());
                     break;
                 case "save":
-                    ARRAY_STORAGE.save(uuid);
+                    ARRAY_STORAGE.save(new Resume(uuid));
                     printAll();
                     break;
                 case "update":

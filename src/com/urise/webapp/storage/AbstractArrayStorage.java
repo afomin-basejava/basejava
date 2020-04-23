@@ -17,13 +17,13 @@ public abstract class AbstractArrayStorage implements Storage{
         size = 0;
     }
 
-    public void save(String uuid) {
+    public void save(Resume resume) {
+        String uuid = resume.getUuid();
         if (size < CAPACITY) {
             int index = indexOf(uuid);
             if (index >= 0) {
                 throw new ExistStorageException(uuid);
             } else {
-                Resume resume = new Resume(uuid);
                 saveResume(resume, index);
                 size++;
             }
