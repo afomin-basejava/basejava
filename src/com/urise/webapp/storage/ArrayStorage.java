@@ -1,5 +1,6 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 
 /**
@@ -8,8 +9,7 @@ import com.urise.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public int indexOf(String uuid) {
-        Resume resume = new Resume(uuid);
+    protected int getIndex(String uuid) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;
@@ -20,11 +20,18 @@ public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected void saveResume(Resume resume, int index) {
+        if (size == CAPACITY) {
+            throw new StorageException("Storage overflow to save resume", resume.getUuid());
+        }
         storage[size] = resume;
+        size++;
     }
 
     @Override
-    protected void deleteResume(int index) {
+    protected void deleteResume(String uuid, int index) {
         storage[index] = storage[size - 1];
+        storage[size - 1] = null;
+        size--;
     }
+
 }
