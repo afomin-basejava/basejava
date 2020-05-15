@@ -20,15 +20,13 @@ public class ArrayStorage extends AbstractArrayStorage {
     @Override
     protected void saveResume(Resume resume, Object index) {
         checkStorageOverflow(resume);
-        storage[size] = resume;
-        size++;
+        storeResumeByindex(resume, size);
     }
 
     @Override
     protected void deleteResume(Object index) {
-        storage[(Integer) index] = storage[size - 1];
-        storage[size - 1] = null;
-        size--;
+        storage[(int) index] = storage[size - 1];
+        resize();
     }
 
 }

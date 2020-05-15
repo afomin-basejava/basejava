@@ -18,22 +18,20 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void saveResume(Resume resume, Object indeX) {
+    protected void saveResume(Resume resume, Object index) {
         checkStorageOverflow(resume);
-        int index = (Integer) indeX;
-        int insertPoint = -index - 1;
+        int pos = (int) index;
+        int insertPoint = -pos - 1;
         System.arraycopy(storage, insertPoint, storage, insertPoint + 1,size() - insertPoint);
-        storage[insertPoint] = resume;
-        size++;
+        storeResumeByindex(resume,insertPoint);
     }
 
     @Override
-    protected void deleteResume(Object indeX) {
+    protected void deleteResume(Object index) {
 //        if (size - 1 - index >= 0) {
-        int index = (Integer) indeX;
-        System.arraycopy(storage, index + 1, storage, index, size - 1 - index);
-        storage[size - 1] = null;
-        size--;
+        int pos = (int) index;
+        System.arraycopy(storage, pos + 1, storage, pos, size - 1 - pos);
+        resize();
 //        }
     }
 

@@ -1,10 +1,7 @@
 package com.urise.webapp;
 
 import com.urise.webapp.model.Resume;
-import com.urise.webapp.storage.ArrayStorage;
-import com.urise.webapp.storage.ListStorage;
-import com.urise.webapp.storage.SortedArrayStorage;
-import com.urise.webapp.storage.Storage;
+import com.urise.webapp.storage.*;
 
 import java.io.BufferedReader;
 import java.io.FilterInputStream;
@@ -19,7 +16,7 @@ import java.util.Scanner;
 public class MainArray {
     private  static final Storage ARRAY_STORAGE;
     static {
-        System.out.println("Type 1 - ArrayStorage" + "\n" + "2 - SortedArrayStorage" + "\n" + "3 - ListStorage");
+        System.out.println("Type 1 - ArrayStorage" + "\n" + "2 - SortedArrayStorage" + "\n" + "3 - ListStorage" + "\n" + "4 - MapStorage");
 //        String accessType = new Scanner(new BufferedInputStream(System.in){public void close(){}}).nextLine();
         int accessType = new Scanner(new FilterInputStream(System.in){public void close(){}}).nextInt();
         if (accessType == 1) {
@@ -31,7 +28,10 @@ public class MainArray {
         } else if (accessType == 3) {
             ARRAY_STORAGE = new ListStorage();
             System.out.println("accessType = " + accessType + " - " + ARRAY_STORAGE.getClass().getName());
-        } else {
+        } else if (accessType == 4) {
+            ARRAY_STORAGE = new MapStorage();
+            System.out.println("accessType = " + accessType + " - " + ARRAY_STORAGE.getClass().getName());
+        }else {
             ARRAY_STORAGE = new ArrayStorage();
             System.out.println("Default accessType = " + ARRAY_STORAGE.getClass().getName());
         }

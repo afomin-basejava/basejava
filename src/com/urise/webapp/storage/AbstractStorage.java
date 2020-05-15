@@ -6,8 +6,6 @@ import com.urise.webapp.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
 
-    public abstract void clear();
-
 // if resume doesn't exist in storage ************************* // throw ExistStorageException if resume is exist
     @Override
     public void save(Resume resume) {
@@ -34,15 +32,9 @@ public abstract class AbstractStorage implements Storage {
         updateResume(resume, index);
     }
 
-    @Override
-    public abstract Resume[] getAll();
-
-    @Override
-    public abstract int size();
-
 //***********************************************************************
 
-    protected abstract Integer getIndex(String uuid);
+    protected abstract Object getIndex(String uuid);
 
     protected abstract void saveResume(Resume resume, Object index);
 
@@ -55,7 +47,7 @@ public abstract class AbstractStorage implements Storage {
 //***********************************************************************
 
     private Object checkExistStorageException(String uuid) { // save not exist resume
-        Integer index = getIndex(uuid);
+        Object index = getIndex(uuid);
         if (isExistResume(index)) {    // already exist
             throw new ExistStorageException(uuid);
         }
@@ -67,9 +59,9 @@ public abstract class AbstractStorage implements Storage {
     }
 
     private Object checkNotExistStorageException(String uuid) { // get delete update exist resume
-        Integer index = getIndex(uuid);
+        Object index = getIndex(uuid);
 //        if (index == null) {
-        if (!isExistResume(index)) {
+        if (!isExistResume(index)) {    // doesn't exist
             throw new NotExistStorageException(uuid);
         }
         return index;

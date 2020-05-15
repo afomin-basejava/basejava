@@ -53,7 +53,7 @@ public abstract class AbstractArrayStorageTest {
         resume = new Resume("uuid2");
         storage.save(resume);
         assertEquals(oldSize + 1, storage.size());
-//        assertTrue(checkExistResume(resume));
+        assertTrue(checkExistResume(resume));
     }
 
     @Test(expected = ExistStorageException.class)
