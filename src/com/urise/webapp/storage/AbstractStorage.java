@@ -9,8 +9,8 @@ public abstract class AbstractStorage implements Storage {
 // if resume doesn't exist in storage ************************* // throw ExistStorageException if resume is exist
     @Override
     public void save(Resume resume) {
-        Object index = checkExistStorageException(resume.getUuid());
-        saveResume(resume, index);
+        Object searchKey = checkExistStorageException(resume.getUuid());
+        saveResume(resume, searchKey);
     }
 
 // if resume exist in storage ********************************* // throw NotExistStorageException if resume is absent
@@ -32,34 +32,34 @@ public abstract class AbstractStorage implements Storage {
         updateResume(resume, index);
     }
 
-//***********************************************************************
+//**********************************************g*************************
 
-    protected abstract Object getIndex(String uuid);
+    protected abstract Object getSearchKey(String searchKey);
 
-    protected abstract void saveResume(Resume resume, Object index);
+    protected abstract void saveResume(Resume resume, Object searchKey);
 
-    protected abstract void deleteResume(Object index);
+    protected abstract void deleteResume(Object searchKey);
 
-    protected abstract Resume getResume(Object index);
+    protected abstract Resume getResume(Object searchKey);
 
-    protected abstract void updateResume(Resume resume, Object index);
+    protected abstract void updateResume(Resume resume, Object searchKey);
 
 //***********************************************************************
 
     private Object checkExistStorageException(String uuid) { // save not exist resume
-        Object index = getIndex(uuid);
+        Object index = getSearchKey(uuid);
         if (isExistResume(index)) {    // already exist
             throw new ExistStorageException(uuid);
         }
         return index;
     }
 
-    protected boolean isExistResume(Object index) {
-        return index != null;
+    protected boolean isExistResume(Object key) {
+        return key != null;
     }
 
     private Object checkNotExistStorageException(String uuid) { // get delete update exist resume
-        Object index = getIndex(uuid);
+        Object index = getSearchKey(uuid);
 //        if (index == null) {
         if (!isExistResume(index)) {    // doesn't exist
             throw new NotExistStorageException(uuid);
