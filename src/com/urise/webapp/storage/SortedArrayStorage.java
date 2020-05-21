@@ -2,14 +2,31 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.model.Resume;
 
+import java.util.Comparator;
+
 import static java.util.Arrays.binarySearch;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
 
+    private static class ResumeComparator implements Comparator<Resume> {
+        @Override
+        public int compare(Resume resume1, Resume resume2) {
+            return
+                    resume1.getUuid().compareTo(resume2.getUuid());
+        }
+    }
+//    private static final Comparator<Resume> RESUME_COMPARATOR = (resume1, resume2) -> resume1.getUuid().compareTo(resume2.getUuid());
+    private static final Comparator<Resume> RESUME_COMPARATOR;
+
+    static {
+        RESUME_COMPARATOR = Comparator.comparing(Resume::getUuid);
+    }
+
     @Override
     protected Integer getSearchKey(String uuid) {
-        Resume searchKey = new Resume(uuid);
-        return binarySearch(storage, 0, size(), searchKey);
+        Resume searchKey = new Resume(uuid, "");
+//        return binarySearch(storage, 0, size(), searchKey, new ResumeComparator());
+        return binarySearch(storage, 0, size(), searchKey, RESUME_COMPARATOR);
     }
 
     @Override

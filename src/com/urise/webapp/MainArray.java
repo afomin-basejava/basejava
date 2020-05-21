@@ -7,6 +7,8 @@ import java.io.BufferedReader;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 /**
@@ -16,7 +18,11 @@ import java.util.Scanner;
 public class MainArray {
     private  static final Storage ARRAY_STORAGE;
     static {
-        System.out.println("Type 1 - ArrayStorage" + "\n" + "2 - SortedArrayStorage" + "\n" + "3 - ListStorage" + "\n" + "4 - MapStorage");
+        System.out.println("Type 1 - ArrayStorage" + "\n" +
+                "2 - SortedArrayStorage" + "\n" +
+                "3 - ListStorage" + "\n" +
+                "4 - MapStorage" + "\n" +
+                "5 - MapStorageResume");
 //        String accessType = new Scanner(new BufferedInputStream(System.in){public void close(){}}).nextLine();
         int accessType = new Scanner(new FilterInputStream(System.in){public void close(){}}).nextInt();
         if (accessType == 1) {
@@ -31,7 +37,10 @@ public class MainArray {
         } else if (accessType == 4) {
             ARRAY_STORAGE = new MapStorage();
             System.out.println("accessType = " + accessType + " - " + ARRAY_STORAGE.getClass().getName());
-        }else {
+        } else if (accessType == 5) {
+            ARRAY_STORAGE = new MapStorageResume();
+            System.out.println("accessType = " + accessType + " - " + ARRAY_STORAGE.getClass().getName());
+        } else {
             ARRAY_STORAGE = new ArrayStorage();
             System.out.println("Default accessType = " + ARRAY_STORAGE.getClass().getName());
         }
@@ -59,11 +68,12 @@ public class MainArray {
                     System.out.println(ARRAY_STORAGE.size());
                     break;
                 case "save":
-                    ARRAY_STORAGE.save(new Resume(uuid));
+                    Random random = new Random();
+                    ARRAY_STORAGE.save(new Resume(uuid, "FullName" + random.nextInt(100)));
                     printAll();
                     break;
                 case "update":
-                    resume = new Resume(uuid);
+                    resume = new Resume(uuid, "FullName" + new Random().nextInt(1000));
                     ARRAY_STORAGE.update(resume);
                     printAll();
                     break;
@@ -87,6 +97,7 @@ public class MainArray {
         }
     }
 
+/*
     static void printAll() {
         Resume[] all = ARRAY_STORAGE.getAll();
         System.out.println("----------------------------");
@@ -99,4 +110,17 @@ public class MainArray {
         }
         System.out.println("----------------------------");
     }
+*/
+static void printAll() {
+    List<Resume> all = ARRAY_STORAGE.getAllSorted();
+    System.out.println("----------------------------");
+    if (all.size() == 0) {
+        System.out.println("Empty");
+    } else {
+        for (Resume resume : all) {
+            System.out.println(resume);
+        }
+    }
+    System.out.println("----------------------------");
+}
 }
