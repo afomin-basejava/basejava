@@ -8,11 +8,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 import static com.urise.webapp.storage.AbstractArrayStorage.CAPACITY;
-import static java.util.Arrays.sort;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
@@ -111,10 +111,8 @@ public abstract class AbstractStorageTest {
             storage.save(initial[i]);
         }
         List<Resume> listFromStorage = storage.getAllSorted();
-        sort(initial);
-        Resume[] resumesFromStorage = listFromStorage.toArray(new Resume[0]);
-        assertArrayEquals(resumesFromStorage, initial);
-        assertEquals(resumesFromStorage.length, storage.size());
+        Arrays.sort(initial);
+        assertEquals(listFromStorage, Arrays.asList(initial));
     }
 
     @Test

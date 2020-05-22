@@ -8,19 +8,7 @@ import static java.util.Arrays.binarySearch;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
 
-    private static class ResumeComparator implements Comparator<Resume> {
-        @Override
-        public int compare(Resume resume1, Resume resume2) {
-            return
-                    resume1.getUuid().compareTo(resume2.getUuid());
-        }
-    }
-//    private static final Comparator<Resume> RESUME_COMPARATOR = (resume1, resume2) -> resume1.getUuid().compareTo(resume2.getUuid());
-    private static final Comparator<Resume> RESUME_COMPARATOR;
-
-    static {
-        RESUME_COMPARATOR = Comparator.comparing(Resume::getUuid);
-    }
+    private static final Comparator<Resume> RESUME_COMPARATOR = Comparator.comparing(Resume::getUuid);
 
     @Override
     protected Integer getSearchKey(String uuid) {
