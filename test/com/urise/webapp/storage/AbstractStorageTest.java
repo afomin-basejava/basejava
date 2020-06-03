@@ -8,9 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static com.urise.webapp.storage.AbstractArrayStorage.CAPACITY;
 import static org.hamcrest.CoreMatchers.is;
@@ -32,7 +30,7 @@ public abstract class AbstractStorageTest {
     public void fillStorage() {
         storage.save(resume);
         sizeOfStorage++;
-        for (int i = 0; i < new Random().nextInt(CAPACITY - 1); i++) {
+        for (int i = 0; i < new Random().nextInt(CAPACITY); i++) {
             storage.save(new Resume("Some One SomeOn_ыч" + " " + i + "th"));
             sizeOfStorage++;
         }
@@ -52,7 +50,7 @@ public abstract class AbstractStorageTest {
     @Test
     public void saveTest() {
         int oldSize = storage.size();
-        resume = new Resume("uuid2");
+        resume = new Resume("fullName");
         storage.save(resume);
         assertEquals(oldSize + 1, storage.size());
         assertTrue(checkExistResume(resume));
@@ -105,14 +103,15 @@ public abstract class AbstractStorageTest {
     public void getAllSortedTest() {
         storage.clear();
         int limit = new Random().nextInt(CAPACITY);
-        Resume[] initial = new Resume[limit];
+        List<Resume> initial = new ArrayList<>();
         for (int i = 0; i < limit; i++) {
-            initial[i] = new Resume("uuid_" + i);
-            storage.save(initial[i]);
+            initial.add(new Resume("uuid_" + i));
+            storage.save(initial.get(i));
         }
+        Comparator<Resume> resumeComparator = Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid);
+        initial.sort(resumeComparator);
         List<Resume> listFromStorage = storage.getAllSorted();
-        Arrays.sort(initial);
-        assertEquals(listFromStorage, Arrays.asList(initial));
+        assertEquals(listFromStorage, initial);
     }
 
     @Test

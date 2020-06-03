@@ -22,7 +22,7 @@ public class MainArray {
                 "2 - SortedArrayStorage" + "\n" +
                 "3 - ListStorage" + "\n" +
                 "4 - MapStorage" + "\n" +
-                "5 - MapStorageResume");
+                "5 - MapStorageResume" + "\n");
 //        String accessType = new Scanner(new BufferedInputStream(System.in){public void close(){}}).nextLine();
         int accessType = new Scanner(new FilterInputStream(System.in){public void close(){}}).nextInt();
         if (accessType == 1) {
@@ -50,15 +50,15 @@ public class MainArray {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         Resume resume;
         while (true) {
-            System.out.print("Введите одну из команд - (list | save uuid | delete uuid | get uuid | clear | exit): ");
+            System.out.print("Введите одну из команд - (list | save fullName | delete uuid | get uuid | update uuid fullName | clear | exit): ");
             String[] params = reader.readLine().trim().toLowerCase().split(" ");
-            if (params.length < 1 || params.length > 2) {
+            if (params.length < 1 || params.length > 3) {
                 System.out.println("Неверная команда.");
                 continue;
             }
-            String uuid = null;
-            if (params.length == 2) {
-                uuid = params[1].intern();
+            String param = null;
+            if (params.length > 1) {
+                param = params[1].intern();
             }
             switch (params[0]) {
                 case "list":
@@ -69,20 +69,22 @@ public class MainArray {
                     break;
                 case "save":
                     Random random = new Random();
-                    ARRAY_STORAGE.save(new Resume(uuid, "FullName" + random.nextInt(100)));
+//                    ARRAY_STORAGE.save(new Resume(param, "FullName" + random.nextInt(100)));
+                    ARRAY_STORAGE.save(new Resume(param));
                     printAll();
                     break;
                 case "update":
-                    resume = new Resume(uuid, "FullName" + new Random().nextInt(1000));
+//                    resume = new Resume(param, "FullName" + new Random().nextInt(1000));
+                    resume = new Resume(param, params[2]);
                     ARRAY_STORAGE.update(resume);
                     printAll();
                     break;
                 case "delete":
-                    ARRAY_STORAGE.delete(uuid);
+                    ARRAY_STORAGE.delete(param);
                     printAll();
                     break;
                 case "get":
-                    System.out.println(ARRAY_STORAGE.get(uuid));
+                    System.out.println(ARRAY_STORAGE.get(param));
                     break;
                 case "clear":
                     ARRAY_STORAGE.clear();
@@ -97,11 +99,11 @@ public class MainArray {
         }
     }
 
-/*
+
     static void printAll() {
-        Resume[] all = ARRAY_STORAGE.getAll();
+        List<Resume> all = ARRAY_STORAGE.getAllSorted();
         System.out.println("----------------------------");
-        if (all.length == 0) {
+        if (all.size() == 0) {
             System.out.println("Empty");
         } else {
             for (Resume resume : all) {
@@ -110,17 +112,4 @@ public class MainArray {
         }
         System.out.println("----------------------------");
     }
-*/
-static void printAll() {
-    List<Resume> all = ARRAY_STORAGE.getAllSorted();
-    System.out.println("----------------------------");
-    if (all.size() == 0) {
-        System.out.println("Empty");
-    } else {
-        for (Resume resume : all) {
-            System.out.println(resume);
-        }
-    }
-    System.out.println("----------------------------");
-}
 }

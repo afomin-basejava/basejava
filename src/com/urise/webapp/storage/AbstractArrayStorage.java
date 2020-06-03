@@ -6,7 +6,7 @@ import com.urise.webapp.model.Resume;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class AbstractArrayStorage extends AbstractStorage{
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer>{
     protected static final int CAPACITY = 4;
     protected static int size = 0;
     protected final Resume[] storage = new Resume[CAPACITY];
@@ -23,33 +23,33 @@ public abstract class AbstractArrayStorage extends AbstractStorage{
     }
 
     @Override
-    protected void updateResume(Resume resume, Object index) {
-        storage[(Integer) index] = resume;
+    protected void updateResume(Resume resume, Integer index) {
+        storage[index] = resume;
     }
 
     @Override
-    protected Resume getResume(Object index) {
-        return storage[(Integer) index];
+    protected Resume getResume(Integer index) {
+        return storage[index];
     }
 
     @Override
-    protected void saveResume(Resume resume, Object index) {
+    protected void saveResume(Resume resume, Integer index) {
         if (size == CAPACITY) {
             throw new StorageException("Storage overflow to save resume", resume.getUuid());
         }
-        addResumeToStorage(resume, (Integer) index);
+        addResumeToStorage(resume, index);
         size++;
     }
 
     @Override
-    protected void deleteResume(Object index) {
-        deleteResumeFromStorage((int) index);
+    protected void deleteResume(Integer index) {
+        deleteResumeFromStorage(index);
         storage[size - 1] = null;
         size--;
     }
 
     @Override
-    protected List<Resume> getAllUnsorted() {
+    protected List<Resume> getAll() {
         return Arrays.asList(Arrays.copyOf(storage, size));
     }
 
@@ -58,8 +58,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage{
     protected abstract void deleteResumeFromStorage(int index);
 
     @Override
-    protected boolean isExistResume(Object index) {
-        return ((Integer) index) >= 0;
+    protected boolean isExistResume(Integer index) {
+        return (index) >= 0;
     }
 
 }
