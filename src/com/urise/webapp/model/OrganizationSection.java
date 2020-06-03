@@ -4,6 +4,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class OrganizationSection extends Section{
+    private static DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/yyyy");
     private List<Organization> organizations;
 
     public OrganizationSection(List<Organization> organizations) {
@@ -12,7 +13,7 @@ public class OrganizationSection extends Section{
 
     @Override
     public void printSection(SectionType sectionType, Section section) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/YYYY");
+
         System.out.println(sectionType.getTitle());
         System.out.println();
         for (Organization organization : organizations) {
@@ -25,6 +26,7 @@ public class OrganizationSection extends Section{
                         (job.getJobDescription().equals("") ? "\r" :  "\n" + job.getJobDescription())
                 );
             }
+            System.out.println();
         }
         printSectionDelimeter();
     }
