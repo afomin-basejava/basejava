@@ -61,20 +61,20 @@ public class ResumeTestData {
         section = new ListSection(stringList);
         resume.setSections(SectionType.QUALIFICATIONS, section);
 //----------------------------------------------------------
-        prepareOrganizationList(new String[]{"2013-10"}, new String[]{"0"}, new String[]{"Автор проекта"}, "Создание, организация и проведение Java онлайн проектов и стажировок", "Java Online Projects");
-        prepareOrganizationList(new String[]{"2014-10"}, new String[]{"2016-01"}, new String[]{"Старший разработчик (backend)"}, "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.", "Wrike");
-        prepareOrganizationList(new String[]{"2012-04"}, new String[]{"2014-10"}, new String[]{"Java архитектор"}, "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.", "RIT Center");
+        prepareOrganizationList(new String[]{"2013-10"}, new String[]{"0"}, new String[]{"Автор проекта"}, "Создание, организация и проведение Java онлайн проектов и стажировок", "Java Online Projects", "");
+        prepareOrganizationList(new String[]{"2014-10"}, new String[]{"2016-01"}, new String[]{"Старший разработчик (backend)"}, "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.", "Wrike", "");
+        prepareOrganizationList(new String[]{"2012-04"}, new String[]{"2014-10"}, new String[]{"Java архитектор"}, "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.", "RIT Center", "");
         prepareOrganizationList(new String[]{"2010-12"}, new String[]{"2012-04"}, new String[]{"Ведущий программист"}, "Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC, SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM.\n" +
-                "                Реализация RIA-приложения для администрирования, мониторинга и анализа результатов в области алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5.", "Luxoft (Deutsche Bank)");
-        prepareOrganizationList(new String[]{"2008-06"}, new String[]{"2010-12"}, new String[]{"Ведущий специалист"}, "Дизайн и имплементация Java EE фреймворка для отдела \"Платежные Системы\" (GlassFish v2.1, v3, OC4J, EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2). Реализация администрирования, статистики и мониторинга фреймворка. Разработка online JMX клиента (Python/ Jython, Django, ExtJS)", "Yota");
-        prepareOrganizationList(new String[]{"2007-03"}, new String[]{"2008-06"}, new String[]{"Разработчик ПО"}, "Реализация клиентской (Eclipse RCP) и серверной (JBoss 4.2, Hibernate 3.0, Tomcat, JMS) частей кластерного J2EE приложения (OLAP, Data mining).", "Enkata");
-        prepareOrganizationList(new String[]{"2005-01", "2005-01"}, new String[]{"2007-02", "2007-02"}, new String[]{"Разработчик ПО", "Разработчик ПО"},"Разработка информационной модели, проектирование интерфейсов, реализация и отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix)." , "Siemens AG");
-        prepareOrganizationList(new String[]{"1997-09"}, new String[]{"2005-01"}, new String[]{"Инженер по аппаратному и программному тестированию"}, "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM).","Alcatel");
+                "                Реализация RIA-приложения для администрирования, мониторинга и анализа результатов в области алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5.", "Luxoft (Deutsche Bank)", "");
+        prepareOrganizationList(new String[]{"2008-06"}, new String[]{"2010-12"}, new String[]{"Ведущий специалист"}, "Дизайн и имплементация Java EE фреймворка для отдела \"Платежные Системы\" (GlassFish v2.1, v3, OC4J, EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2). Реализация администрирования, статистики и мониторинга фреймворка. Разработка online JMX клиента (Python/ Jython, Django, ExtJS)", "Yota", "https://www.yota.ru/");
+        prepareOrganizationList(new String[]{"2007-03"}, new String[]{"2008-06"}, new String[]{"Разработчик ПО"}, "Реализация клиентской (Eclipse RCP) и серверной (JBoss 4.2, Hibernate 3.0, Tomcat, JMS) частей кластерного J2EE приложения (OLAP, Data mining).", "Enkata", "");
+        prepareOrganizationList(new String[]{"2005-01", "2005-01"}, new String[]{"2007-02", "2007-02"}, new String[]{"Разработчик ПО", "Разработчик ПО"},"Разработка информационной модели, проектирование интерфейсов, реализация и отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix)." , "Siemens AG","");
+        prepareOrganizationList(new String[]{"1997-09"}, new String[]{"2005-01"}, new String[]{"Инженер по аппаратному и программному тестированию"}, "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM).","Alcatel", "");
         section = new OrganizationSection(organizationList);
         resume.setSections(SectionType.EXPIRIENCE, section);
 //----------------------------------------------------------
         organizationList = new ArrayList<>();
-        prepareOrganizationList(new String[]{"1993-09", "1987-09"}, new String[]{"1997-09", "1993-09"}, new String[]{"Аспирантура (программист С, С++)", "Инженер (программист Fortran, C)"}, "","Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики");
+        prepareOrganizationList(new String[]{"1993-09", "1987-09"}, new String[]{"1997-09", "1993-09"}, new String[]{"Аспирантура (программист С, С++)", "Инженер (программист Fortran, C)"}, "","Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики","");
         section = new OrganizationSection(organizationList);
         resume.setSections(SectionType.EDUCATION, section);
 
@@ -88,18 +88,21 @@ public class ResumeTestData {
         }
     }
 
-    private static void prepareOrganizationList(String[] startDate, String[] endDate, String[] jobName, String description, String organ) {
+    private static void prepareOrganizationList(String[] startDate, String[] endDate, String[] jobName, String description, String organ, String url) {
         DateTimeFormatter dtfBuilder = new DateTimeFormatterBuilder()
-                .appendPattern("yyyy-MM").parseDefaulting(ChronoField.DAY_OF_MONTH, 01).toFormatter();
+                .appendPattern("yyyy-MM")
+                .parseDefaulting(ChronoField.DAY_OF_MONTH, 01)
+                .toFormatter();
         List<Organization.Job> jobList = new ArrayList<>();
         for (int i = 0; i < jobName.length; i++) {
             LocalDate start = LocalDate.parse(startDate[i], dtfBuilder);
             LocalDate end = LocalDate.ofEpochDay(0);
-            if (!endDate[i].equals("0"))
+            if (!endDate[i].equals("0")) {
                 end = LocalDate.parse(endDate[i], dtfBuilder);
+            }
             jobList.add(new Organization.Job(jobName[i], start, end, description));
         }
-        Organization organization = new Organization(organ, jobList);
+        Organization organization = new Organization(organ, url, jobList);
         organizationList.add(organization);
     }
 

@@ -6,15 +6,24 @@ import java.util.Objects;
 
 public class Organization {
     private String name;
+    private String url;
     private List<Job> jobs;
 
     public Organization(String name, List<Job> jobs) {
+        this(name, "", jobs);
+    }
+    public Organization(String name, String url, List<Job> jobs) {
         this.name = name;
+        this.url = url;
         this.jobs = jobs;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getUrl() {
+        return url;
     }
 
     public List<Job> getJobs() {
