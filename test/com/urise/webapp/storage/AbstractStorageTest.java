@@ -17,9 +17,9 @@ import static org.junit.Assert.*;
 public abstract class AbstractStorageTest {
     private final Storage storage;
     private String uuid1 = "uuid1";
-    private String fullName = "Some One SomeOn_ыч";
-    private Resume resume = new Resume(uuid1, fullName);
-
+    private String fullName = "Григорий Кислин";
+//    private Resume resume = new Resume(uuid1, fullName);
+    private Resume resume = new ResumeTestData().createResumeWithSections(uuid1, fullName);
     private static int sizeOfStorage = 0;  // for storage size() testing
 
     public AbstractStorageTest(Storage storage) {

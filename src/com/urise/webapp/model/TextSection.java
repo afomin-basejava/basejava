@@ -2,7 +2,7 @@ package com.urise.webapp.model;
 
 import java.util.Objects;
 
-public class TextSection extends Section {
+public class TextSection extends AbstractSection {
 
     private String textSection;
 
@@ -36,13 +36,7 @@ public class TextSection extends Section {
 
     @Override
     public String toString() {
-        return textSection;
+        return getTextSection() + "\n";
     }
 
-    @Override
-    public void printSection(SectionType sectionType, Section section) {
-        System.out.println(sectionType.getTitle() + '\n');
-        System.out.println(getTextSection() + "\n");
-        printSectionDelimeter();
-    }
 }

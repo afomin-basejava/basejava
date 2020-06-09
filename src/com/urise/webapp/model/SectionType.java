@@ -21,10 +21,4 @@ public enum SectionType {
     public void setTitle(String title) {
         this.title = title;
     }
-
-    public static void main(String[] args) {
-        PERSONAL.setTitle("Личные качестваaaaaaaaaa");
-        for (SectionType type : SectionType.values())
-            System.out.println(type.getTitle());
-    }
 }

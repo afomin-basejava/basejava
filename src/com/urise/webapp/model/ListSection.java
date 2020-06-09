@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ListSection extends Section {
+public class ListSection extends AbstractSection {
     private List<String> listSection = new ArrayList<>();
 
     public ListSection(List<String> listSection) {
@@ -37,18 +37,7 @@ public class ListSection extends Section {
 
     @Override
     public String toString() {
-        return "ListSection{" +
-                "listSection=" + listSection +
-                '}';
-    }
-
-    @Override
-    public void printSection(SectionType sectionType, Section section) {
-        System.out.println();
-        System.out.println(sectionType.getTitle());
-        System.out.println();
-        listSection.forEach(s -> System.out.println(s + "\n"));
-        printSectionDelimeter();
+        return listSection.stream().map(s -> s + "\n").reduce("", (s1, s2) -> s1 + s2 );
     }
 
 }

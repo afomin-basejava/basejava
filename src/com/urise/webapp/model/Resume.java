@@ -10,24 +10,12 @@ import java.util.UUID;
  */
 public class Resume  {
     // Unique identifier
-    private final String uuid;
-    private final String fullName;
+    private String uuid;
+    private String fullName;
     private Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
-    private Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
-
-    public Map<SectionType, Section> getSections() {
-        return sections;
-    }
-    public Section getSection(SectionType type) {
-        return sections.get(type);
-    }
-
-    public void setSections(SectionType sectionType, Section section) {
-        sections.put(sectionType, section);
-    }
+    private Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
     public Resume() {
-        this(UUID.nameUUIDFromBytes(new byte[] {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37 , 41}).toString(), "SomeOne");
     }
 
     public Resume(String fullName) {
@@ -53,6 +41,16 @@ public class Resume  {
         contacts.put(contactType, text);
     }
 
+    public Map<SectionType, AbstractSection> getSections() {
+        return sections;
+    }
+    public AbstractSection getSection(SectionType type) {
+        return sections.get(type);
+    }
+    public void setSection(SectionType sectionType, AbstractSection section) {
+        sections.put(sectionType, section);
+    }
+
     public String getUuid() {
         return uuid;
     }
@@ -71,15 +69,14 @@ public class Resume  {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Resume resume = (Resume) o;
-        return  this.uuid.equals(resume.uuid) &&
-                this.fullName.equals(resume.fullName) //&& this.contacts.equals(resume.contacts)
-                ;
+        return getUuid().equals(resume.getUuid()) &&
+                getFullName().equals(resume.getFullName()) &&
+                getContacts().equals(resume.getContacts()) &&
+                getSections().equals(resume.getSections());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, fullName);
+        return Objects.hash(getUuid(), getFullName(), getContacts(), getSections());
     }
-
-
 }
