@@ -31,6 +31,7 @@ public class OrganizationSection extends AbstractSection {
                     .append(" - ")
                     .append((job.getFinishDate().toEpochDay() == 0 ? "Сeйчас" : job.getFinishDate().format(DTF)))
                     .append("\t\t")
+                    .append(job.getJobName())
                     .append((job.getJobDescription().equals("") ? "\r" : "\n" + job.getJobDescription()))
                     .append("\n")
                 ;

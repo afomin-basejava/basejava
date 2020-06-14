@@ -68,6 +68,10 @@ public abstract class AbstractStorage<SK> implements Storage {
 
     protected abstract List<Resume> getAll();   // unsorted List<Resume>
 
+    protected boolean isExistResume(SK searchKey) {
+        return searchKey != null;
+    }
+
 //***********************************************************************
 
     private SK checkExistStorageException(String uuid) { // save not exist resume
@@ -77,10 +81,6 @@ public abstract class AbstractStorage<SK> implements Storage {
             throw new ExistStorageException(uuid);
         }
         return searchKey;
-    }
-
-    protected boolean isExistResume(SK searchKey) {
-        return searchKey != null;
     }
 
     private SK checkNotExistStorageException(String uuid) { // get delete update exist resume

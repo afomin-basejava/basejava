@@ -96,9 +96,9 @@ public class ResumeTestData {
         prepareOrganizationList(new String[]{"2007-03"}, new String[]{"2008-06"}, new String[]{"Разработчик ПО"},
                 new String[] {"Реализация клиентской (Eclipse RCP) и серверной (JBoss 4.2, Hibernate 3.0, Tomcat, JMS) частей кластерного J2EE приложения (OLAP, Data mining)."},
                 "Enkata", "http://enkata.com/");
-        prepareOrganizationList(new String[]{"2005-01", "2005-01"}, new String[]{"2007-02", "2007-02"}, new String[]{"Разработчик ПО", "Разработчик ПО"},
+        prepareOrganizationList(new String[]{"2005-01", "2006-01"}, new String[]{"2007-02", "2016-12"}, new String[]{"Разработчик ПО", "Разработчик ПО"},
                 new String[] {"Разработка информационной модели, проектирование интерфейсов, реализация и отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix).",
-                              "Разработка информационной модели, проектирование интерфейсов, реализация и отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix)."},
+                              "Та же работа в разные периоды: Разработка информационной модели, проектирование интерфейсов, реализация и отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix)."},
                 "Siemens AG","https://www.siemens.com/ru/ru/home.html");
         prepareOrganizationList(new String[]{"1997-09"}, new String[]{"2005-01"}, new String[]{"Инженер по аппаратному и программному тестированию"},
                 new String[] {"Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM)."},
@@ -109,19 +109,19 @@ public class ResumeTestData {
         organizationList = new ArrayList<>();
         prepareOrganizationList(new String[]{"1993-09", "1987-09"}, new String[]{"1997-09", "1993-09"},
                 new String[]{"Аспирантура (программист С, С++)", "Инженер (программист Fortran, C)"},
-                new String[] {"", ""},
+                new String[] {"jobDescription Аспирантура (программист С, С++)", "jobDescription Инженер (программист Fortran, C)"},
                 "Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики",
                 "http://www.ifmo.ru");
         prepareOrganizationList(new String[]{"1984-09",}, new String[]{"1987-06",},
                 new String[]{"Закончил с отличием"},
-                new String[] {"", ""},
+                new String[] {"Описание учебы", "лорлорро"}, //  <- second param
                 "Заочная физико-техническая школа при МФТИ",
                 "http://www.school.mipt.ru");
         section = new OrganizationSection(organizationList);
         resume.setSection(SectionType.EDUCATION, section);
         return resume;
     }
-
+//----------------------------------------------------------
     private static void prepareOrganizationList(String[] startDate, String[] endDate, String[] jobName,
                                                 String[] description, String organ, String url) {
         DateTimeFormatter dtfBuilder = new DateTimeFormatterBuilder()
@@ -140,7 +140,7 @@ public class ResumeTestData {
         Organization organization = new Organization(organ, url, jobList);
         organizationList.add(organization);
     }
-
+//----------------------------------------------------------
     private static void printContacts(Resume resume) {
         System.out.println(resume.getFullName() + "\n");
         for (Map.Entry<ContactType, String> entry : resume.getContacts().entrySet()) {
