@@ -13,6 +13,9 @@ import java.util.Map;
 import static com.urise.webapp.model.ContactType.*;
 
 public class ResumeTestData {
+//    interface ResumeCreator<T, U, R> {
+//        R createResume(T uuid, U fullName);
+//    }
     private static List<Organization> organizationList = new ArrayList<>();
     public static void main(String[] args) {
         Resume resume = new ResumeTestData().createResumeWithSections("uuid1", "Григорий Кислин");

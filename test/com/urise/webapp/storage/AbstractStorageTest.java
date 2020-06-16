@@ -15,26 +15,34 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 public abstract class AbstractStorageTest {
+    private interface TestResumeCreator<T, U, R> {
+        R createResume(T uuid, U fullName);
+    }
+    private static TestResumeCreator<String, String, Resume> testResumeCreator = new ResumeTestData()::createResumeWithSections;
+    private static int sizeOfStorage = 0;  // for storage size() testing
+
     private final Storage storage;
     private String uuid1 = "uuid1";
     private String fullName = "Григорий Кислин";
-//    private Resume resume = new Resume(uuid1, fullName);
-    private Resume resume = new ResumeTestData().createResumeWithSections(uuid1, fullName);
-    private static int sizeOfStorage = 0;  // for storage size() testing
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
     }
 
+    private Resume resume = newResume(uuid1, fullName);
+
     @Before
     public void fillStorage() {
         storage.save(resume);
         sizeOfStorage++;
-        for (int i = 0; i < new Random().nextInt(CAPACITY); i++) {
-            storage.save(new Resume("Some One SomeOn_ыч" + " " + i + "th"));
+        for (int i = 0; i < new Random().nextInt(CAPACITY) - 1; i++) {
+//            storage.save(new Resume("Some One SomeOn_ыч" + " " + i + "th"));
+            String uuid = UUID.randomUUID().toString();
+            storage.save(newResume(uuid, "Some One SomeOn_ыч" + " " + i + "th"));
             sizeOfStorage++;
         }
     }
+
     @After
     public void clearStorage() {
         storage.clear();
@@ -50,7 +58,7 @@ public abstract class AbstractStorageTest {
     @Test
     public void saveTest() {
         int oldSize = storage.size();
-        resume = new Resume("fullName");
+        resume = newResume("uuid", "fullName");
         storage.save(resume);
         assertEquals(oldSize + 1, storage.size());
         assertTrue(checkExistResume(resume));
@@ -66,6 +74,7 @@ public abstract class AbstractStorageTest {
         Resume resumeForTest = storage.get(uuid1);
         assertEquals(resume, resumeForTest);
     }
+
     @Test(expected = NotExistStorageException.class)
     public void getWithExceptionTest() {
         storage.get("dummy");
@@ -80,7 +89,7 @@ public abstract class AbstractStorageTest {
     }
 
     @Test(expected = StorageException.class)
-    public void deleteWithExceptionTest() throws StorageException{
+    public void deleteWithExceptionTest() throws StorageException {
         int oldSize = storage.size();
         storage.delete("dummy");
         assertEquals(storage.size(), oldSize);
@@ -96,7 +105,7 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = RuntimeException.class)
     public void updateWithExceptionTest() throws RuntimeException {
-        storage.update(new Resume());
+        storage.update(newResume("uuid", "Full Name"));
     }
 
     @Test
@@ -105,7 +114,7 @@ public abstract class AbstractStorageTest {
         int limit = new Random().nextInt(CAPACITY);
         List<Resume> initial = new ArrayList<>();
         for (int i = 0; i < limit; i++) {
-            initial.add(new Resume("uuid_" + i));
+            initial.add(newResume("uuid_" + i, "Full Name" + i));
             storage.save(initial.get(i));
         }
         Comparator<Resume> resumeComparator = Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid);
@@ -127,5 +136,9 @@ public abstract class AbstractStorageTest {
             check = false;
         }
         return check;
+    }
+
+    private Resume newResume(String uuid, String fullName) {
+        return testResumeCreator.createResume(uuid, fullName);
     }
 }
