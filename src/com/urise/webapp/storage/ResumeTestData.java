@@ -19,10 +19,10 @@ public class ResumeTestData {
     private static List<Organization> organizationList = new ArrayList<>();
     public static void main(String[] args) {
         Resume resume = new ResumeTestData().createResumeWithSections("uuid1", "Григорий Кислин");
-        printResume(resume);
+//        printResume(resume);
     }
 
-    private static void printResume(Resume resume) {
+    static void printResume(Resume resume) {
         for (SectionType sectionType : SectionType.values()) {
             AbstractSection section1 = resume.getSection(sectionType);
             try {
@@ -45,7 +45,7 @@ public class ResumeTestData {
         resume.setContact(GITHUB, "https://github.com/gkislin");
         resume.setContact(STACKOVERFLOW, "https://stackoverflow.com/users/548473");
         resume.setContact(HOMEPAGE, "http://gkislin.ru/");
-        printContacts(resume);
+//        printContacts(resume);
 //----------------------------------------------------------
         AbstractSection section = new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
         resume.setSection(SectionType.OBJECTIVE, section);
@@ -81,6 +81,7 @@ public class ResumeTestData {
         section = new ListSection(stringList);
         resume.setSection(SectionType.QUALIFICATIONS, section);
 //----------------------------------------------------------
+        organizationList.clear();// = new ArrayList<>();
         prepareOrganizationList(new String[]{"2013-10"}, new String[]{"0"}, new String[]{"Автор проекта"},
                 new String[] {"Создание, организация и проведение Java онлайн проектов и стажировок"},
                 "Java Online Projects", "http://javaops.ru/");
@@ -109,7 +110,7 @@ public class ResumeTestData {
         section = new OrganizationSection(organizationList);
         resume.setSection(SectionType.EXPIRIENCE, section);
 //----------------------------------------------------------
-        organizationList = new ArrayList<>();
+        organizationList.clear(); // = new ArrayList<>();
         prepareOrganizationList(new String[]{"1993-09", "1987-09"}, new String[]{"1997-09", "1993-09"},
                 new String[]{"Аспирантура (программист С, С++)", "Инженер (программист Fortran, C)"},
                 new String[] {"jobDescription Аспирантура (программист С, С++)", "jobDescription Инженер (программист Fortran, C)"},

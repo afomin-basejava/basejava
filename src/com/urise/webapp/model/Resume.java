@@ -1,14 +1,17 @@
 package com.urise.webapp.model;
 
+import java.io.Serializable;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 /**
  * Initial resume class
  */
-public class Resume  {
+public class Resume implements Serializable {
+    private static final long serialVersionUID = 1L;
     // Unique identifier
     private String uuid;
     private String fullName;
@@ -39,7 +42,7 @@ public class Resume  {
     }
     public void setContact(ContactType contactType, String text) {
         contacts.put(contactType, text);
-    }
+    } // addContact
 
     public Map<SectionType, AbstractSection> getSections() {
         return sections;
@@ -47,7 +50,7 @@ public class Resume  {
     public AbstractSection getSection(SectionType type) {
         return sections.get(type);
     }
-    public void setSection(SectionType sectionType, AbstractSection section) {
+    public void setSection(SectionType sectionType, AbstractSection section) { // addSection
         sections.put(sectionType, section);
     }
 
@@ -69,14 +72,35 @@ public class Resume  {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Resume resume = (Resume) o;
-        return getUuid().equals(resume.getUuid()) &&
-                getFullName().equals(resume.getFullName()) &&
-                getContacts().equals(resume.getContacts()) &&
-                getSections().equals(resume.getSections());
+        return this.getUuid().equals(resume.getUuid()) &&
+            this.getFullName().equals(resume.getFullName())
+            &&
+            this.getContacts().toString().equals(resume.getContacts().toString())
+            &&
+            new Predicate<Resume>() {
+                @Override
+                public boolean test(Resume resume) {
+                    if (resume.getSections().size() != (((Resume) o).getSections().size())) {
+                        return false;
+                    }
+                    for (SectionType type : SectionType.values()) {
+                        if (resume.getSection(type) != null && ((Resume) o).getSection(type) != null) {
+                            if (!resume.getSection(type).toString().equals(((Resume) o).getSection(type).toString())) {
+                                return false;
+                            }
+                        } else {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+            }.test(this)
+        ;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(getUuid(), getFullName(), getContacts(), getSections());
     }
+
 }

@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public abstract class AbstractArrayStorage extends AbstractStorage<Integer>{
-    protected static final int CAPACITY = 20;  // >= 2 : see fillStorage() AbstractStorageTest
+    protected static final int CAPACITY = 5;  // >= 2 : see fillStorage() AbstractStorageTest
     protected static int size = 0;
     protected final Resume[] storage = new Resume[CAPACITY];
 

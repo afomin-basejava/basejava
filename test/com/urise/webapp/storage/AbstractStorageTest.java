@@ -22,8 +22,9 @@ public abstract class AbstractStorageTest {
     private static int sizeOfStorage = 0;  // for storage size() testing
 
     private final Storage storage;
-    private String uuid1 = "uuid1";
-    private String fullName = "Григорий Кислин";
+    private final String uuid1 = "uuid1";
+    private final String uuid2 = "uuid2";
+    private final String fullName = "Григорий Кислин";
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -33,10 +34,10 @@ public abstract class AbstractStorageTest {
 
     @Before
     public void fillStorage() {
+        storage.clear();
         storage.save(resume);
         sizeOfStorage++;
         for (int i = 0; i < new Random().nextInt(CAPACITY) - 1; i++) {
-//            storage.save(new Resume("Some One SomeOn_ыч" + " " + i + "th"));
             String uuid = UUID.randomUUID().toString();
             storage.save(newResume(uuid, "Some One SomeOn_ыч" + " " + i + "th"));
             sizeOfStorage++;
@@ -45,7 +46,7 @@ public abstract class AbstractStorageTest {
 
     @After
     public void clearStorage() {
-        storage.clear();
+//        storage.clear();
         sizeOfStorage = 0;
     }
 

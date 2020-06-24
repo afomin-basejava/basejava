@@ -3,23 +3,35 @@ package com.urise.webapp;
 import java.io.File;
 
 public class MainFile {
-//    D:\basejava
+    public static final int INDENT = 2;
+    private static final File FILE = new File("\\basejava");
     public static void main(String[] args) {
-        File directory = new File("D:\\basejava");
-        recursionWalk(directory);
+        printDirectoryDeeply(FILE, INDENT);
     }
-    private static void recursionWalk(File dir) {
+    private static void printDirectoryDeeply(File dir, int indent) { // indent < 0 === indent = 0
+        if (!dir.isDirectory()) {
+            throw new IllegalArgumentException("File " + dir + " must be a FILE DIRECTORY");
+        }
         if (dir.isDirectory()) {
-            System.out.println("\n" + dir);
+            indentPrint(dir, indent);
             File[] filesList = dir.listFiles();
             if (filesList != null) {
                 for (File fileName : filesList) {
-                    if (fileName.isDirectory())
-                        recursionWalk(fileName);
-                    else
-                        System.out.println(fileName);
+                    if (fileName.isDirectory()) {
+                        printDirectoryDeeply(fileName, indent);
+                    } else {
+                        indentPrint(fileName, indent);
+                    }
                 }
             }
         }
+    }
+
+    private static void indentPrint(File file, int indent) { // indent < 0 === indent = 0
+        int size = file.toPath().getNameCount();
+        for (int i = 0; i < indent * (size - FILE.toPath().getNameCount()); i++) {
+            System.out.print(" ");
+        }
+        System.out.println(file.getName());
     }
 }
