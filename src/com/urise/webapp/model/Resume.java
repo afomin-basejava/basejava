@@ -71,7 +71,7 @@ public class Resume implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Resume resume = (Resume) o;
+        final Resume resume = (Resume) o;
         return this.getUuid().equals(resume.getUuid()) &&
             this.getFullName().equals(resume.getFullName())
             &&
