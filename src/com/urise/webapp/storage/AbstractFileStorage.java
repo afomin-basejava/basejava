@@ -22,12 +22,16 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         this.directory = directory;
     }
 
+    // write resume into file in appropriate format
+    protected abstract void doWrite(Resume resume, OutputStream file) throws IOException;
+    // read resume from file in appropriate format
+    protected abstract Resume doRead(InputStream file) throws IOException, ClassNotFoundException;
+
     @Override
     protected File getSearchKey(String uuid) {
 //        File getSearchFile = new File(directory, uuid);
         return new File(directory, uuid);
     }
-
     @Override
     protected void saveResume(Resume resume, File file) {
         try {
@@ -37,10 +41,6 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         }
         updateResume(resume, file);
     }
-    // write resume into file in appropriate format
-    protected abstract void doWrite(Resume resume, OutputStream file) throws IOException;
-    // read resume from file in appropriate format
-    protected abstract Resume doRead(InputStream file) throws IOException, ClassNotFoundException;
 
     @Override
     protected void deleteResume(File file) {

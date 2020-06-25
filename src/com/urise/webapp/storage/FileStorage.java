@@ -39,10 +39,6 @@ public class FileStorage extends AbstractStorage<File> {
         }
         updateResume(resume, file);
     }
-//    // write resume into file in appropriate format
-//    protected abstract void doWrite(Resume resume, OutputStream file) throws IOException;
-//    // read resume from file in appropriate format
-//    protected abstract Resume doRead(InputStream file) throws IOException, ClassNotFoundException;
 
     @Override
     protected void deleteResume(File file) {
@@ -71,7 +67,6 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     protected List<Resume> getAll() {
-//        List<Resume> resumes =
         File[] fileList = directory.listFiles();
         if (fileList == null) {
             throw new StorageException("getAll(): Directory read error " + directory.getAbsolutePath(), null);

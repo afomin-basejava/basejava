@@ -8,26 +8,26 @@ public class MainFile {
     public static void main(String[] args) {
         printDirectoryDeeply(FILE, INDENT);
     }
-    private static void printDirectoryDeeply(File dir, int indent) { // indent < 0 === indent = 0
+    private static void printDirectoryDeeply(File dir, int indent) {
         if (!dir.isDirectory()) {
             throw new IllegalArgumentException("File " + dir + " must be a FILE DIRECTORY");
         }
         if (dir.isDirectory()) {
-            indentPrint(dir, indent);
+            printFileNameWithIndent(dir, indent);
             File[] filesList = dir.listFiles();
             if (filesList != null) {
                 for (File fileName : filesList) {
                     if (fileName.isDirectory()) {
                         printDirectoryDeeply(fileName, indent);
                     } else {
-                        indentPrint(fileName, indent);
+                        printFileNameWithIndent(fileName, indent);
                     }
                 }
             }
         }
     }
 
-    private static void indentPrint(File file, int indent) { // indent < 0 === indent = 0
+    private static void printFileNameWithIndent(File file, int indent) { // indent < 0 === indent = 0
         int size = file.toPath().getNameCount();
         for (int i = 0; i < indent * (size - FILE.toPath().getNameCount()); i++) {
             System.out.print(" ");

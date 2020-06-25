@@ -118,7 +118,9 @@ public abstract class AbstractStorageTest {
             initial.add(newResume("uuid_" + i, "Full Name" + i));
             storage.save(initial.get(i));
         }
-        Comparator<Resume> resumeComparator = Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid);
+        Comparator<Resume> resumeComparator = Comparator
+                .comparing(Resume::getFullName)
+                .thenComparing(Resume::getUuid);
         initial.sort(resumeComparator);
         List<Resume> listFromStorage = storage.getAllSorted();
         assertEquals(listFromStorage, initial);

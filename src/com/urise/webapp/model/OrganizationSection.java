@@ -7,12 +7,26 @@ import java.util.Objects;
 public class OrganizationSection extends AbstractSection {
     private static final long serialVersionUID = 1L;
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("MM/yyyy");
+
     private List<Organization> organizations;
 
     public OrganizationSection(List<Organization> organizations) {
 
         Objects.requireNonNull(organizations, "OrganizationSection must be not null");
         this.organizations = organizations;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrganizationSection that = (OrganizationSection) o;
+        return organizations.equals(that.organizations);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(organizations);
     }
     @Override
     public String toString() {

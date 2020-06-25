@@ -25,6 +25,11 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
         this.directory = directory;
     }
 
+    // write resume into file in appropriate format
+    protected abstract void doWrite(Resume resume, OutputStream file) throws IOException;
+    // read resume from file in appropriate format
+    protected abstract Resume doRead(InputStream file) throws IOException, ClassNotFoundException;
+
     @Override
     protected Path getSearchKey(String uuid) {
         return Paths.get(String.valueOf(directory), uuid);
@@ -39,10 +44,6 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
         }
         updateResume(resume, file);
     }
-    // write resume into file in appropriate format
-    protected abstract void doWrite(Resume resume, OutputStream file) throws IOException;
-    // read resume from file in appropriate format
-    protected abstract Resume doRead(InputStream file) throws IOException, ClassNotFoundException;
 
     @Override
     protected void deleteResume(Path path) {
