@@ -15,22 +15,21 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 public abstract class AbstractStorageTest {
+    protected static final String RESUME_STORAGE_DIRECTORY = "D:\\basejava\\storage";
     private interface TestResumeCreator<T, U, R> {
         R createResume(T uuid, U fullName);
     }
     private static TestResumeCreator<String, String, Resume> testResumeCreator = new ResumeTestData()::createResumeWithSections;
     private static int sizeOfStorage = 0;  // for storage size() testing
-
     private final Storage storage;
     private final String uuid1 = "uuid1";
     private final String uuid2 = "uuid2";
     private final String fullName = "Григорий Кислин";
+    private Resume resume = newResume(uuid1, fullName);
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
     }
-
-    private Resume resume = newResume(uuid1, fullName);
 
     @Before
     public void fillStorage() {

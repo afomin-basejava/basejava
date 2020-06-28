@@ -2,14 +2,18 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
+import com.urise.webapp.storage.serializerstrategy.SerializerStrategy;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PathStorage extends AbstractStorage<Path> {
     private Path directory;
@@ -33,13 +37,13 @@ public class PathStorage extends AbstractStorage<Path> {
     }
 
     @Override
-    protected void saveResume(Resume resume, Path file) {
+    protected void doSave(Resume resume, Path file) {
         try {
             Files.createFile(file);
         } catch (IOException e) {
             throw new StorageException("IO Error: couldn't create file " + file.toAbsolutePath(), null, e);
         }
-        updateResume(resume, file);
+        doUpdate(resume, file);
     }
 //    // write resume into file in appropriate format
 //    protected abstract void doWrite(Resume resume, OutputStream file) throws IOException;
@@ -47,7 +51,7 @@ public class PathStorage extends AbstractStorage<Path> {
 //    protected abstract Resume doRead(InputStream file) throws IOException, ClassNotFoundException;
 
     @Override
-    protected void deleteResume(Path path) {
+    protected void doDelete(Path path) {
         try {
             Files.delete(path);
         } catch (IOException e) {
@@ -58,7 +62,7 @@ public class PathStorage extends AbstractStorage<Path> {
 //        }
     }
     @Override
-    protected Resume getResume(Path file) {
+    protected Resume doGet(Path file) {
         try {
             return serializerStrategy.doRead(new BufferedInputStream(Files.newInputStream(file)));
         } catch (IOException | ClassNotFoundException e) {
@@ -67,7 +71,7 @@ public class PathStorage extends AbstractStorage<Path> {
     }
 
     @Override
-    protected void updateResume(Resume resume, Path path) {
+    protected void doUpdate(Resume resume, Path path) {
         try {
             serializerStrategy.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
@@ -77,38 +81,34 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected List<Resume> getAll() {
-        try {
             return
-                Files.list(directory)
-                .map(this::getResume)
+                pathes()
+                .map(this::doGet)
                 .collect(Collectors.toList())
             ;
-        } catch (IOException e) {
-            throw new StorageException("IO Error getAll(): ", "directory " + directory, e);
-        }
     }
 
     @Override
     public void clear() {
-        try {
-            Files.list(directory).forEach(this::deleteResume);
-        } catch (IOException e) {
-            throw new StorageException("IO Error clear(): ", "directory " + directory, e);
-        }
+        pathes().forEach(this::doDelete);
     }
 
     @Override
     public int size() {
         // return number of Resume's file in the directory (that must contain no subdirectories?)
-        try {
-            return (int) Files.list(directory).count();
-        } catch (IOException e) {
-            throw new StorageException("IO Error size(): ", "directory " + directory, e);
-        }
+            return (int) pathes().count();
     }
 
     @Override
     protected boolean isExistResume(Path path) {
         return Files.exists(path);
+    }
+
+    private Stream<Path> pathes() {
+        try {
+            return Files.list(directory);
+        } catch (IOException e) {
+            throw new StorageException("IO Error: ", "directory " + directory, e);
+        }
     }
 }

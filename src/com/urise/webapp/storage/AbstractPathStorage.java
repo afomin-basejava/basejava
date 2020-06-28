@@ -36,17 +36,17 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     }
 
     @Override
-    protected void saveResume(Resume resume, Path file) {
+    protected void doSave(Resume resume, Path file) {
         try {
             Files.createFile(file);
         } catch (IOException e) {
             throw new StorageException("IO Error: couldn't create file " + file.toAbsolutePath(), null, e);
         }
-        updateResume(resume, file);
+        doUpdate(resume, file);
     }
 
     @Override
-    protected void deleteResume(Path path) {
+    protected void doDelete(Path path) {
         try {
             Files.delete(path);
         } catch (IOException e) {
@@ -57,7 +57,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
 //        }
     }
     @Override
-    protected Resume getResume(Path file) {
+    protected Resume doGet(Path file) {
         try {
             return doRead(new BufferedInputStream(Files.newInputStream(file)));
         } catch (IOException | ClassNotFoundException e) {
@@ -66,7 +66,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     }
 
     @Override
-    protected void updateResume(Resume resume, Path path) {
+    protected void doUpdate(Resume resume, Path path) {
         try {
             doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
@@ -79,7 +79,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
         try {
             return
                 Files.list(directory)
-                .map(this::getResume)
+                .map(this::doGet)
                 .collect(Collectors.toList())
             ;
         } catch (IOException e) {
@@ -90,7 +90,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> {
     @Override
     public void clear() {
         try {
-            Files.list(directory).forEach(this::deleteResume);
+            Files.list(directory).forEach(this::doDelete);
         } catch (IOException e) {
             throw new StorageException("IO Error clear(): ", "directory " + directory, e);
         }

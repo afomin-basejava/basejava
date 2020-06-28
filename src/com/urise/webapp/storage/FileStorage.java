@@ -2,11 +2,13 @@ package com.urise.webapp.storage;
 
 import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
+import com.urise.webapp.storage.serializerstrategy.SerializerStrategy;
 
 import java.io.*;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class FileStorage extends AbstractStorage<File> {
     private File directory;
@@ -31,23 +33,23 @@ public class FileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    protected void saveResume(Resume resume, File file) {
+    protected void doSave(Resume resume, File file) {
         try {
             file.createNewFile();
         } catch (IOException e) {
             throw new StorageException("IO Error: couldn't create file " + file.getAbsolutePath(), file.getName(), e);
         }
-        updateResume(resume, file);
+        doUpdate(resume, file);
     }
 
     @Override
-    protected void deleteResume(File file) {
+    protected void doDelete(File file) {
         if (!file.delete()) {
             throw new StorageException("File deleting error", file.toString());
         }
     }
     @Override
-    protected Resume getResume(File file) {
+    protected Resume doGet(File file) {
         Resume resume = null;
         try {
             return serializerStrategy.doRead(new BufferedInputStream(new FileInputStream(file)));
@@ -57,7 +59,7 @@ public class FileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    protected void updateResume(Resume resume, File file) {
+    protected void doUpdate(Resume resume, File file) {
         try {
             serializerStrategy.doWrite(resume, new BufferedOutputStream( new FileOutputStream(file)));
         } catch (IOException e) {
@@ -67,25 +69,18 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     protected List<Resume> getAll() {
-        File[] fileList = directory.listFiles();
-        if (fileList == null) {
-            throw new StorageException("getAll(): Directory read error " + directory.getAbsolutePath(), null);
-        }
-        List<Resume> resumes = new ArrayList<>(fileList.length);
-        for (File resumeFile : fileList) {
-            resumes.add(getResume(resumeFile));
-        }
-        return resumes;
+        return
+                Arrays.asList(listFiles())
+                .stream()
+                .map(file -> doGet(file))
+                .collect(Collectors.toList());
     }
 
     @Override
     public void clear() {
-        File[] files = directory.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                if (!file.isDirectory()) {
-                    deleteResume(file);
-                }
+        for (File file : listFiles()) {
+            if (!file.isDirectory()) {
+                doDelete(file);
             }
         }
     }
@@ -93,15 +88,20 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     public int size() {
         // return number of Resume's file in the directory (that must contain no subdirectories?)
-        String[] list = directory.list();
-        if (list == null) {
-            throw new StorageException("size(): Directory read error ", null);
-        }
-        return list.length;
+        return listFiles().length;
     }
 
     @Override
     protected boolean isExistResume(File file) {
         return file.exists();
     }
+
+    private File[] listFiles() {
+        File[] files = directory.listFiles();
+        if (files == null) {
+            throw new StorageException("FileStorage - Directory read error: ", directory.toString());
+        }
+        return files;
+    }
+
 }

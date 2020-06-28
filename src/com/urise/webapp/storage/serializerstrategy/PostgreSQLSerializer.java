@@ -1,4 +1,4 @@
-package com.urise.webapp.storage;
+package com.urise.webapp.storage.serializerstrategy;
 
 import com.urise.webapp.model.Resume;
 
@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class XMLSerializer implements SerializerStrategy{
+public class PostgreSQLSerializer implements SerializerStrategy {
     @Override
     public void doWrite(Resume resume, OutputStream file) throws IOException {
 
