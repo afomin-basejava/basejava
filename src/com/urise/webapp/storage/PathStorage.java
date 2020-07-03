@@ -1,28 +1,108 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.exception.StorageException;
 import com.urise.webapp.model.Resume;
 import com.urise.webapp.storage.serializerstrategy.SerializerStrategy;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class PathStorage extends AbstractPathStorage {
+public class PathStorage extends AbstractStorage<Path> {
+    private Path directory;
     private SerializerStrategy serializerStrategy;
 
     public PathStorage(Path directory, SerializerStrategy serializerStrategy) {
-        super(directory);
+        Objects.requireNonNull(directory, "directory must be no null");
+        if (!Files.isDirectory(directory)) {
+            throw new IllegalArgumentException(directory.toAbsolutePath() + "is not directory");
+        }
+        if (!Files.isWritable(directory)) {
+            throw new IllegalArgumentException(directory.toAbsolutePath() + " is not readable/writable");
+        }
+        this.directory = directory;
         this.serializerStrategy = serializerStrategy;
     }
 
     @Override
-    protected void doWrite(Resume resume, OutputStream file) throws IOException {
-        serializerStrategy.doWrite(resume, file);
+    protected Path getSearchKey(String uuid) {
+        return Paths.get(String.valueOf(directory), uuid);
     }
 
     @Override
-    protected Resume doRead(InputStream file) throws IOException, ClassNotFoundException {
-        return serializerStrategy.doRead(file);
+    protected void doSave(Resume resume, Path file) {
+        try {
+            Files.createFile(file);
+        } catch (IOException e) {
+            throw new StorageException("IO Error: couldn't create file " + file.toAbsolutePath(), null, e);
+        }
+        doUpdate(resume, file);
+    }
+
+    @Override
+    protected void doDelete(Path path) {
+        try {
+            Files.delete(path);
+        } catch (IOException e) {
+            throw new StorageException("File deleting error", path.toString(), e);
+        }
+    }
+
+    @Override
+    protected Resume doGet(Path file) {
+        try {
+            return serializerStrategy.doRead(new BufferedInputStream(Files.newInputStream(file)));
+        } catch (IOException | ClassNotFoundException e) {
+            throw new StorageException("getResume(): File read error", directory.toAbsolutePath().toString(), e);
+        }
+    }
+
+    @Override
+    protected void doUpdate(Resume resume, Path path) {
+        try {
+            serializerStrategy.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
+        } catch (IOException e) {
+            throw new StorageException("updateResume(..., ...) IO Error ", resume.getUuid(), e);
+        }
+    }
+
+    @Override
+    protected List<Resume> getAll() {
+            return
+                pathes()
+                .map(this::doGet)
+                .collect(Collectors.toList())
+            ;
+    }
+
+    @Override
+    public void clear() {
+        pathes().forEach(this::doDelete);
+    }
+
+    @Override
+    public int size() {
+        // return number of Resume's file in the directory (that must contain no subdirectories?)
+            return (int) pathes().count();
+    }
+
+    @Override
+    protected boolean isExistResume(Path path) {
+        return Files.exists(path);
+    }
+
+    private Stream<Path> pathes() {
+        try {
+            return Files.list(directory);
+        } catch (IOException e) {
+            throw new StorageException("IO Error: ", "directory " + directory, e);
+        }
     }
 }
