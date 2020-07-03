@@ -19,19 +19,7 @@ public class ResumeTestData {
     private static List<Organization> organizationList = new ArrayList<>();
     public static void main(String[] args) {
         Resume resume = new ResumeTestData().createResumeWithSections("uuid1", "Григорий Кислин");
-//        printResume(resume);
-    }
-
-    static void printResume(Resume resume) {
-        for (SectionType sectionType : SectionType.values()) {
-            AbstractSection section1 = resume.getSection(sectionType);
-            try {
-                System.out.println(sectionType.getTitle());
-                System.out.println(section1);
-            } catch (RuntimeException rte) {
-                System.out.println("wrong section " + sectionType + " " + section1);
-            }
-        }
+        printResume(resume);
     }
 
     public Resume createResumeWithSections(String uuid, String fullName) {
@@ -44,7 +32,6 @@ public class ResumeTestData {
         resume.setContact(GITHUB, "https://github.com/gkislin");
         resume.setContact(STACKOVERFLOW, "https://stackoverflow.com/users/548473");
         resume.setContact(HOMEPAGE, "http://gkislin.ru/");
-//        printContacts(resume);
 //----------------------------------------------------------
         AbstractSection section = new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
         resume.setSection(SectionType.OBJECTIVE, section);
@@ -80,7 +67,7 @@ public class ResumeTestData {
         section = new ListSection(stringList);
         resume.setSection(SectionType.QUALIFICATIONS, section);
 //----------------------------------------------------------
-        organizationList.clear();
+        organizationList = new ArrayList<>();
         prepareOrganizationList(new String[]{"2013-10"}, new String[]{"0"}, new String[]{"Автор проекта"},
                 new String[] {"Создание, организация и проведение Java онлайн проектов и стажировок"},
                 "Java Online Projects", "http://javaops.ru/");
@@ -109,7 +96,7 @@ public class ResumeTestData {
         section = new OrganizationSection(organizationList);
         resume.setSection(SectionType.EXPIRIENCE, section);
 //----------------------------------------------------------
-        organizationList.clear(); // = new ArrayList<>();
+        organizationList = new ArrayList<>();
         prepareOrganizationList(new String[]{"1993-09", "1987-09"}, new String[]{"1997-09", "1993-09"},
                 new String[]{"Аспирантура (программист С, С++)", "Инженер (программист Fortran, C)"},
                 new String[] {"jobDescription Аспирантура (программист С, С++)", "jobDescription Инженер (программист Fortran, C)"},
@@ -148,6 +135,19 @@ public class ResumeTestData {
         System.out.println(resume.getFullName() + "\n");
         for (Map.Entry<ContactType, String> entry : resume.getContacts().entrySet()) {
             System.out.println(entry.getKey() + ":" + entry.getValue());
+        }
+    }
+
+    private static void printResume(Resume resume) {
+        printContacts(resume);
+        for (SectionType sectionType : SectionType.values()) {
+            AbstractSection section1 = resume.getSection(sectionType);
+            try {
+                System.out.println(sectionType.getTitle());
+                System.out.println(section1);
+            } catch (RuntimeException rte) {
+                System.out.println("wrong section " + sectionType + " " + section1);
+            }
         }
     }
 

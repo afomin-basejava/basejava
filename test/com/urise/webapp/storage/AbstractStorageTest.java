@@ -71,6 +71,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void getTest() {
+        int i = 0;
         Resume resumeForTest = storage.get(uuid1);
         assertEquals(resume, resumeForTest);
     }
@@ -121,6 +122,7 @@ public abstract class AbstractStorageTest {
                 .comparing(Resume::getFullName)
                 .thenComparing(Resume::getUuid);
         initial.sort(resumeComparator);
+//        initial.sort(null);
         List<Resume> listFromStorage = storage.getAllSorted();
         assertEquals(listFromStorage, initial);
     }
@@ -140,7 +142,7 @@ public abstract class AbstractStorageTest {
         return check;
     }
 
-    private Resume newResume(String uuid, String fullName) {
+    private static Resume newResume(String uuid, String fullName) {
         return testResumeCreator.createResume(uuid, fullName);
     }
 }

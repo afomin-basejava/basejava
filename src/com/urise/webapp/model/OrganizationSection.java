@@ -19,7 +19,7 @@ public class OrganizationSection extends AbstractSection {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof OrganizationSection)) return false;
         OrganizationSection that = (OrganizationSection) o;
         return organizations.equals(that.organizations);
     }
@@ -28,6 +28,7 @@ public class OrganizationSection extends AbstractSection {
     public int hashCode() {
         return Objects.hash(organizations);
     }
+
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder("\n");

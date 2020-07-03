@@ -36,15 +36,16 @@ public class Organization implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Organization)) return false;
         Organization that = (Organization) o;
-        return name.equals(that.name) &&
-                jobs.equals(that.jobs);
+        return getName().equals(that.getName()) &&
+                getUrl().equals(that.getUrl()) &&
+                Objects.equals(getJobs(), that.getJobs());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, jobs);
+        return Objects.hash(getName(), getUrl(), getJobs());
     }
 
     public static class Job implements Serializable {
