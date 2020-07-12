@@ -1,8 +1,12 @@
 package com.urise.webapp.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
+
+@XmlAccessorType(XmlAccessType.FIELD)
 
 public class OrganizationSection extends AbstractSection {
     private static final long serialVersionUID = 1L;
@@ -10,8 +14,9 @@ public class OrganizationSection extends AbstractSection {
 
     private List<Organization> organizations;
 
+    public OrganizationSection() {
+    }
     public OrganizationSection(List<Organization> organizations) {
-
         Objects.requireNonNull(organizations, "OrganizationSection must be not null");
         this.organizations = organizations;
     }

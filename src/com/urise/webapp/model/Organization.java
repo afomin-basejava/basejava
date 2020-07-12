@@ -1,16 +1,25 @@
 package com.urise.webapp.model;
 
+import com.urise.webapp.util.LocalDateAdapter;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Organization implements Serializable {
     private static final long serialVersionUID = 1L;
     private String name;
     private String url;
     private List<Job> jobs;
 
+    public Organization() {
+
+    }
     public Organization(String name, List<Job> jobs) {
         this(name, "", jobs);
     }
@@ -48,13 +57,17 @@ public class Organization implements Serializable {
         return Objects.hash(getName(), getUrl(), getJobs());
     }
 
+    @XmlAccessorType(XmlAccessType.FIELD)
     public static class Job implements Serializable {
 
         private String jobName;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate startDate;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate finishDate;
         private String jobDescription;
 
+        public Job() {}
         public Job(String jobName, LocalDate startDate, LocalDate finishDate, String jobDescription) {
             Objects.requireNonNull(startDate, "startDate must be no null");
             Objects.requireNonNull(finishDate, "finishDate must be no null");

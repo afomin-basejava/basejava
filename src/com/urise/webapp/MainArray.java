@@ -35,10 +35,10 @@ public class MainArray {
             ARRAY_STORAGE = new ListStorage();
             System.out.println("accessType = " + accessType + " - " + ARRAY_STORAGE.getClass().getName());
         } else if (accessType == 4) {
-            ARRAY_STORAGE = new MapStorage();
+            ARRAY_STORAGE = new MapUuidStorage();
             System.out.println("accessType = " + accessType + " - " + ARRAY_STORAGE.getClass().getName());
         } else if (accessType == 5) {
-            ARRAY_STORAGE = new MapStorageResume();
+            ARRAY_STORAGE = new MapResumeStorage();
             System.out.println("accessType = " + accessType + " - " + ARRAY_STORAGE.getClass().getName());
         } else {
             ARRAY_STORAGE = new ArrayStorage();
