@@ -12,6 +12,10 @@ public class OrganizationSection extends AbstractSection {
     private static final long serialVersionUID = 1L;
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("MM/yyyy");
 
+    public List<Organization> getOrganizations() {
+        return organizations;
+    }
+
     private List<Organization> organizations;
 
     public OrganizationSection() {
@@ -36,25 +40,28 @@ public class OrganizationSection extends AbstractSection {
 
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder("\n");
+        StringBuilder stringBuilder = new StringBuilder();
         for (Organization organization : organizations) {
             String orgName = organization.getName();
+            stringBuilder.append(orgName).append("\n");
             String url = organization.getUrl();
-            if (!url.equals("")) {
-//                url = "<a href = " + url + ">" + orgName + "</a>";
-                url = orgName + "  " + url;
-            } else {
-                url = orgName;
-            }
+//            if (!url.equals("")) {
+////                url = "<a href = " + url + ">" + orgName + "</a>";
+//                url = orgName + "  " + url;
+//            } else {
+//                url = orgName;
+//            }
             stringBuilder.append(url).append("\n");
+            stringBuilder.append(organization.getJobs().size()).append("\n");
             for (Organization.Job job : organization.getJobs()) {
                 stringBuilder
                     .append(job.getStartDate().format(DTF))
-                    .append(" - ")
+                    .append("\n")
                     .append((job.getFinishDate().toEpochDay() == 0 ? "Сeйчас" : job.getFinishDate().format(DTF)))
-                    .append("\t\t")
+                    .append("\n")
                     .append(job.getJobName())
-                    .append((job.getJobDescription().equals("") ? "\r" : "\n" + job.getJobDescription()))
+                    .append("\n")
+                    .append((job.getJobDescription().equals("") ? null : job.getJobDescription()))
                     .append("\n")
                 ;
             }

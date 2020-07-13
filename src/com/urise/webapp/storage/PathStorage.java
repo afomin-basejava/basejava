@@ -40,7 +40,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             Files.createFile(file);
         } catch (IOException e) {
-            throw new StorageException("IO Error: couldn't create file " + file.toAbsolutePath(), null, e);
+            throw new StorageException("IO Error: couldn't create file ", file.toAbsolutePath().toString(), e);
         }
         doUpdate(resume, file);
     }
@@ -50,7 +50,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             Files.delete(path);
         } catch (IOException e) {
-            throw new StorageException("File deleting error", path.toString(), e);
+            throw new StorageException("File deleting error ", path.toString(), e);
         }
     }
 
@@ -75,7 +75,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected List<Resume> getAll() {
             return
-                pathes()
+                getPaths()
                 .map(this::doGet)
                 .collect(Collectors.toList())
             ;
@@ -83,13 +83,13 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     public void clear() {
-        pathes().forEach(this::doDelete);
+        getPaths().forEach(this::doDelete);
     }
 
     @Override
     public int size() {
         // return number of Resume's file in the directory (that must contain no subdirectories?)
-            return (int) pathes().count();
+            return (int) getPaths().count();
     }
 
     @Override
@@ -97,11 +97,11 @@ public class PathStorage extends AbstractStorage<Path> {
         return Files.exists(path);
     }
 
-    private Stream<Path> pathes() {
+    private Stream<Path> getPaths() {
         try {
             return Files.list(directory);
         } catch (IOException e) {
-            throw new StorageException("IO Error: ", "directory " + directory, e);
+            throw new StorageException("IO Error: directory " + directory.toAbsolutePath() + e.getCause());
         }
     }
 }
