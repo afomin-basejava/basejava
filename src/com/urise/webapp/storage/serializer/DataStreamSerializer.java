@@ -31,9 +31,11 @@ public class DataStreamSerializer implements StreamSerializer {
 
     @Override
     public Resume doRead(InputStream file) throws IOException {
+        Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+        Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         try (DataInputStream dis = new DataInputStream(file)) {
             //---------------------------------------------------------------------------------
-            Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
             String uuid = dis.readUTF();
             String fullname = dis.readUTF();
             int size = dis.readInt();
@@ -44,7 +46,6 @@ public class DataStreamSerializer implements StreamSerializer {
             }
             //---------------------------------------------------------------------------------
             int numberOfSections = dis.readInt();
-            Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
             for (int i = 0; i < numberOfSections; i++) {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
                 switch (sectionType) {
@@ -68,7 +69,6 @@ public class DataStreamSerializer implements StreamSerializer {
                             String url = sectionAsString[index++];
                             int numberOfJobs = Integer.parseInt(sectionAsString[index++]);
                             for (int jobNumber = 0; jobNumber < numberOfJobs; jobNumber++) {
-                                DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                                 LocalDate startDate = LocalDate.parse(sectionAsString[index++], dtf);
                                 LocalDate finishDate = LocalDate.parse(sectionAsString[index++], dtf);
                                 String jobName = sectionAsString[index++];
