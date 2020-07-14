@@ -37,7 +37,7 @@ public class ListSection extends AbstractSection {
 
     @Override
     public String toString() {
-        return listSection.stream().map(s -> s + "\n").reduce("", (s1, s2) -> s1 + s2 );
+        return listSection.stream().reduce("", (s1, s2) -> (s1 + "\n") + s2 ).substring(1);
     }
 
 }

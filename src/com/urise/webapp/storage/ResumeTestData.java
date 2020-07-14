@@ -11,7 +11,6 @@ import java.util.Map;
 import static com.urise.webapp.util.DateUtil.NOW;
 
 public class ResumeTestData {
-//    private static final List<Organization> organizationList = new ArrayList<>();
     public static void main(String[] args) {
         Resume resume = createResume("uuid1", "Григорий Кислин");
         printResume(resume);
@@ -147,12 +146,12 @@ public class ResumeTestData {
         }
     }
 
-    static void printResume(Resume resume) {
+    public static void printResume(Resume resume) {
         printContacts(resume);
         for (SectionType sectionType : SectionType.values()) {
             AbstractSection section = resume.getSection(sectionType);
             try {
-                System.out.println(sectionType.getTitle());
+                System.out.println(sectionType);
                 System.out.println(section);
             } catch (RuntimeException rte) {
                 System.out.println("wrong section " + sectionType + " " + section);

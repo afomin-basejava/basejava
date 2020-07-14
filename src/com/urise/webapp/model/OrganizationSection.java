@@ -11,12 +11,11 @@ import java.util.Objects;
 public class OrganizationSection extends AbstractSection {
     private static final long serialVersionUID = 1L;
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("MM/yyyy");
+    private List<Organization> organizations;
 
     public List<Organization> getOrganizations() {
         return organizations;
     }
-
-    private List<Organization> organizations;
 
     public OrganizationSection() {
     }
@@ -41,27 +40,22 @@ public class OrganizationSection extends AbstractSection {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(organizations.size()).append("\n");
         for (Organization organization : organizations) {
             String orgName = organization.getName();
             stringBuilder.append(orgName).append("\n");
             String url = organization.getUrl();
-//            if (!url.equals("")) {
-////                url = "<a href = " + url + ">" + orgName + "</a>";
-//                url = orgName + "  " + url;
-//            } else {
-//                url = orgName;
-//            }
             stringBuilder.append(url).append("\n");
             stringBuilder.append(organization.getJobs().size()).append("\n");
             for (Organization.Job job : organization.getJobs()) {
                 stringBuilder
-                    .append(job.getStartDate().format(DTF))
+                    .append(job.getStartDate())
                     .append("\n")
-                    .append((job.getFinishDate().toEpochDay() == 0 ? "Сeйчас" : job.getFinishDate().format(DTF)))
+                    .append(job.getFinishDate())
                     .append("\n")
                     .append(job.getJobName())
                     .append("\n")
-                    .append((job.getJobDescription().equals("") ? null : job.getJobDescription()))
+                    .append(job.getJobDescription().isEmpty() ? "empty" : job.getJobDescription())
                     .append("\n")
                 ;
             }

@@ -31,7 +31,6 @@ public abstract class AbstractStorageTest {
 
     @After
     public void clearStorage() {
-//        storage.clear();
     }
 
     @Test

@@ -87,7 +87,6 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     public int size() {
-        // return number of Resume's file in the directory (that must contain no subdirectories?)
         return listFiles().length;
     }
 

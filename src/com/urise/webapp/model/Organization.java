@@ -69,9 +69,9 @@ public class Organization implements Serializable {
 
         public Job() {}
         public Job(String jobName, LocalDate startDate, LocalDate finishDate, String jobDescription) {
+            Objects.requireNonNull(jobName, "jobName must be no null");
             Objects.requireNonNull(startDate, "startDate must be no null");
             Objects.requireNonNull(finishDate, "finishDate must be no null");
-            Objects.requireNonNull(jobName, "jobName must be no null");
             this.jobName = jobName;
             this.startDate = startDate;
             this.finishDate = finishDate;
