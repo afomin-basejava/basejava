@@ -1,5 +1,7 @@
 package com.urise.webapp.model;
 
+import com.urise.webapp.exception.StorageException;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import java.util.ArrayList;
@@ -37,7 +39,7 @@ public class ListSection extends AbstractSection {
 
     @Override
     public String toString() {
-        return listSection.stream().reduce("", (s1, s2) -> (s1 + "\n") + s2 ).substring(1);
+        return listSection.stream().reduce((s1, s2) -> (s1 + "\n") + s2 ).orElseThrow(() -> new StorageException("Wrong ListSection"));
     }
 
 }

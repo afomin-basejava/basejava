@@ -29,10 +29,6 @@ public abstract class AbstractStorageTest {
         storage.save(RESUME_2);
     }
 
-    @After
-    public void clearStorage() {
-    }
-
     @Test
     public void clear() {
         storage.clear();

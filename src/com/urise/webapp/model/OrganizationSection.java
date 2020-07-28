@@ -13,15 +13,16 @@ public class OrganizationSection extends AbstractSection {
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("MM/yyyy");
     private List<Organization> organizations;
 
-    public List<Organization> getOrganizations() {
-        return organizations;
-    }
-
     public OrganizationSection() {
     }
+
     public OrganizationSection(List<Organization> organizations) {
         Objects.requireNonNull(organizations, "OrganizationSection must be not null");
         this.organizations = organizations;
+    }
+
+    public List<Organization> getOrganizations() {
+        return organizations;
     }
 
     @Override

@@ -8,24 +8,29 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class DataStreamSerializer implements StreamSerializer {
+    private interface WriteCollectionElement<T> {
+        void writeCollectionElement(T element) throws IOException;
+    }
+
+    private static <T> void writeCollection(Collection<T> collection, DataOutputStream dos, WriteCollectionElement<T> wce) throws IOException {
+        dos.writeInt(collection.size());
+        for (T element : collection) {
+            wce.writeCollectionElement(element);
+        }
+    }
     @Override
     public void doWrite(Resume resume, OutputStream file) throws IOException {
-        try (DataOutputStream dos = new DataOutputStream(file)) {
+        try (final DataOutputStream dos = new DataOutputStream(file)) {
             dos.writeUTF(resume.getUuid());
             dos.writeUTF(resume.getFullName());
-            Map<ContactType, String> contacts = resume.getContacts();
-            dos.writeInt(contacts.size());
-            for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
+            writeCollection(resume.getContacts().entrySet(), dos, entry -> {
                 dos.writeUTF(entry.getKey().name());
-                dos.writeUTF(entry.getValue());
-            }
-            Map<SectionType, AbstractSection> sections = resume.getSections();
-            dos.writeInt(sections.size());
-            for (Map.Entry<SectionType, AbstractSection> entry : sections.entrySet()) {
-                SectionType sectionType = entry.getKey();
-                dos.writeUTF(sectionType.name());
                 dos.writeUTF(String.valueOf(entry.getValue()));
-            }
+            });
+            writeCollection(resume.getSections().entrySet(), dos, entry -> {
+                dos.writeUTF(entry.getKey().name());
+                dos.writeUTF(String.valueOf(entry.getValue()));
+            });
         }
     }
 
@@ -41,8 +46,7 @@ public class DataStreamSerializer implements StreamSerializer {
             int size = dis.readInt();
             for (int i = 0; i < size; i++) {
                 ContactType contactType = ContactType.valueOf(dis.readUTF());
-                String contact = dis.readUTF();
-                contacts.put(contactType, contact);
+                contacts.put(contactType, dis.readUTF());
             }
             //---------------------------------------------------------------------------------
             int numberOfSections = dis.readInt();
