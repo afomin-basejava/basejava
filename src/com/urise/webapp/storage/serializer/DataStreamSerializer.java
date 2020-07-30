@@ -8,16 +8,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class DataStreamSerializer implements StreamSerializer {
-    private interface WriteCollectionElement<T> {
-        void writeCollectionElement(T element) throws IOException;
-    }
-
-    private static <T> void writeCollection(Collection<T> collection, DataOutputStream dos, WriteCollectionElement<T> wce) throws IOException {
-        dos.writeInt(collection.size());
-        for (T element : collection) {
-            wce.writeCollectionElement(element);
-        }
-    }
     @Override
     public void doWrite(Resume resume, OutputStream file) throws IOException {
         try (final DataOutputStream dos = new DataOutputStream(file)) {
@@ -36,61 +26,77 @@ public class DataStreamSerializer implements StreamSerializer {
 
     @Override
     public Resume doRead(InputStream file) throws IOException {
-        Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
-        Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         try (DataInputStream dis = new DataInputStream(file)) {
-            //---------------------------------------------------------------------------------
             String uuid = dis.readUTF();
-            String fullname = dis.readUTF();
-            int size = dis.readInt();
-            for (int i = 0; i < size; i++) {
-                ContactType contactType = ContactType.valueOf(dis.readUTF());
-                contacts.put(contactType, dis.readUTF());
-            }
-            //---------------------------------------------------------------------------------
-            int numberOfSections = dis.readInt();
-            for (int i = 0; i < numberOfSections; i++) {
+            String fullName = dis.readUTF();
+            Resume resume = new Resume(uuid, fullName);
+            readElements(dis, () -> resume.setContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
+            readElements(dis, () -> {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
-                switch (sectionType) {
-                    case OBJECTIVE:
-                    case PERSONAL:
-                        sections.put(sectionType, new TextSection(dis.readUTF()));
-                        break;
-                    case ACHIEVEMENT:
-                    case QUALIFICATIONS:
-                        sections.put(sectionType, new ListSection(new ArrayList<>(Arrays.asList(dis.readUTF().split("\n")))));
-                        break;
-                    case EDUCATION:
-                    case EXPIRIENCE:
-                        List<Organization> organizations = new ArrayList<>();
-                        String[] sectionAsString = dis.readUTF().split("\n");
-                        int index = 0;
-                        int numberOfOrganization = Integer.parseInt(sectionAsString[index++]);
-                        for (int organizationNumber = 0; organizationNumber < numberOfOrganization; organizationNumber++) {
-                            List<Organization.Job> jobs = new ArrayList<>();
-                            String organ = sectionAsString[index++];
-                            String url = sectionAsString[index++];
-                            int numberOfJobs = Integer.parseInt(sectionAsString[index++]);
-                            for (int jobNumber = 0; jobNumber < numberOfJobs; jobNumber++) {
-                                LocalDate startDate = LocalDate.parse(sectionAsString[index++], dtf);
-                                LocalDate finishDate = LocalDate.parse(sectionAsString[index++], dtf);
-                                String jobName = sectionAsString[index++];
-                                String jobDescription = sectionAsString[index++];
-                                if (jobDescription.equals("empty")) {
-                                    jobDescription = "";
-                                }
-                                jobs.add(new Organization.Job(jobName, startDate, finishDate, jobDescription));
-                            }
-                            organizations.add(new Organization(organ, url, jobs));
-                        }
-                        sections.put(sectionType, new OrganizationSection(organizations));
-                        break;
-                    default:
-                        throw new IllegalStateException("Unexpected value: " + sectionType);
-                }
-            }
-            return new Resume(uuid, fullname, contacts, sections);
+                resume.setSection(sectionType, readSection(dis, sectionType));
+            });
+            return resume;
         }
     }
+
+    private <T> void writeCollection(Collection<T> collection, DataOutputStream dos, WriteCollectionElement<T> wce) throws IOException {
+        dos.writeInt(collection.size());
+        for (T element : collection) {
+            wce.writeCollectionElement(element);
+        }
+    }
+
+    private interface WriteCollectionElement<T> {
+        void writeCollectionElement(T element) throws IOException;
+    }
+
+    private void readElements(DataInputStream dis, ReadElement re) throws IOException {
+        int size = dis.readInt();           // EnumMaps size
+        for (int i = 0; i < size; i++) {
+            re.readElement();
+        }
+    }
+
+    private interface ReadElement {
+        void readElement() throws IOException;
+    }
+
+    private AbstractSection readSection(DataInputStream dis, SectionType sectionType) throws IOException {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String[] sectionAsStringArray = dis.readUTF().split("\n");
+        switch (sectionType) {
+            case OBJECTIVE:
+            case PERSONAL:
+                return new TextSection(sectionAsStringArray[0]);
+            case ACHIEVEMENT:
+            case QUALIFICATIONS:
+                return new ListSection(new ArrayList<>(Arrays.asList(sectionAsStringArray)));
+            case EDUCATION:
+            case EXPIRIENCE:
+                List<Organization> organizations = new ArrayList<>();
+                int index = 0;
+                int numberOfOrganization = Integer.parseInt(sectionAsStringArray[index++]);
+                for (int organizationNumber = 0; organizationNumber < numberOfOrganization; organizationNumber++) {
+                    List<Organization.Job> jobs = new ArrayList<>();
+                    String organ = sectionAsStringArray[index++];
+                    String url = sectionAsStringArray[index++];
+                    int numberOfJobs = Integer.parseInt(sectionAsStringArray[index++]);
+                    for (int jobNumber = 0; jobNumber < numberOfJobs; jobNumber++) {
+                        LocalDate startDate = LocalDate.parse(sectionAsStringArray[index++], dtf);
+                        LocalDate finishDate = LocalDate.parse(sectionAsStringArray[index++], dtf);
+                        String name = sectionAsStringArray[index++];
+                        String description = sectionAsStringArray[index++];
+                        if (description.equals("empty")) {
+                            description = "";
+                        }
+                        jobs.add(new Organization.Job(name, startDate, finishDate, description));
+                    }
+                    organizations.add(new Organization(organ, url, jobs));
+                }
+                return new OrganizationSection(organizations);
+            default:
+                throw new IllegalStateException("Unexpected value: " + sectionType);
+        }
+    }
+
 }

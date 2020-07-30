@@ -54,9 +54,9 @@ public class OrganizationSection extends AbstractSection {
                     .append("\n")
                     .append(job.getFinishDate())
                     .append("\n")
-                    .append(job.getJobName())
+                    .append(job.getName())
                     .append("\n")
-                    .append(job.getJobDescription().isEmpty() ? "empty" : job.getJobDescription())
+                    .append(job.getDescription().isEmpty() ? "empty" : job.getDescription())
                     .append("\n")
                 ;
             }

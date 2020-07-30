@@ -15,8 +15,6 @@ public class ResumeTestData {
         Resume resume = createResume("uuid1", "Григорий Кислин");
         printResume(resume);
     }
-    private static Map<ContactType, String> RESUME_CONTACTS;
-    private static Map<SectionType, AbstractSection> RESUME_SECTIONS;
 
     private static final String UUID_1 = "uuid_1";
     private static final String FULL_NAME_1 = "Grigory Kislin";
@@ -31,8 +29,8 @@ public class ResumeTestData {
     static final Resume RESUME_3;
 
     static {
-        RESUME_CONTACTS = new EnumMap<>(ContactType.class);
-        RESUME_SECTIONS = new EnumMap<>(SectionType.class);
+        Map<ContactType, String> RESUME_CONTACTS = new EnumMap<>(ContactType.class);
+        Map<SectionType, AbstractSection> RESUME_SECTIONS = new EnumMap<>(SectionType.class);
 
         RESUME_CONTACTS.put(ContactType.EMAIL, "mailto:gkislin@yandex.ru");
         RESUME_CONTACTS.put(ContactType.RESIDENCE, "Saint-Petersburg");
@@ -62,7 +60,7 @@ public class ResumeTestData {
                 "Родной русский, английский \"upper intermediate\"")));
         RESUME_SECTIONS.put(SectionType.EDUCATION, new OrganizationSection(
                         Arrays.asList(
-                                new Organization("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", "http://www.ifmo.ru",
+                                new Organization("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", null,
                                         Arrays.asList(
                                                 new Organization.Job("Аспирантура (программист С, С++)",
                                                         LocalDate.parse("1993-09", DateUtil.dateFormatter()),
@@ -80,7 +78,7 @@ public class ResumeTestData {
                                                 new Organization.Job("Закончил с отличием",
                                                         LocalDate.parse("1987-09", DateUtil.dateFormatter()),
                                                         LocalDate.parse("1993-09", DateUtil.dateFormatter()),
-                                                        "Описание учебы")
+                                                        null)
                                         )
                                 )
                         )

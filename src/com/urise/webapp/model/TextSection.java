@@ -2,6 +2,7 @@ package com.urise.webapp.model;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import java.util.Arrays;
 import java.util.Objects;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -16,6 +17,9 @@ public class TextSection extends AbstractSection {
     }
     public TextSection(String textSection) {
         this.textSection = textSection;
+    }
+    public TextSection(String[] text) {
+        this.textSection = Arrays.stream(text).reduce((s1, s2) -> new StringBuilder().append(s1).append(' ').append(s2).toString()).get();
     }
 
     public String getTextSection() {

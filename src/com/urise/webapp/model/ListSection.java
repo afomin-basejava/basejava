@@ -39,7 +39,8 @@ public class ListSection extends AbstractSection {
 
     @Override
     public String toString() {
-        return listSection.stream().reduce((s1, s2) -> (s1 + "\n") + s2 ).orElseThrow(() -> new StorageException("Wrong ListSection"));
+        return listSection.stream().reduce((s1, s2) -> (s1 + "\n") + s2 )
+                .orElseThrow(() -> new StorageException("Wrong ListSection"));
     }
 
 }

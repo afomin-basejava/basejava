@@ -26,7 +26,7 @@ public class Organization implements Serializable {
 
     public Organization(String name, String url, List<Job> jobs) {
         this.name = name;
-        this.url = url;
+        this.url = nonNullString(url);
         this.jobs = jobs;
     }
 
@@ -40,6 +40,10 @@ public class Organization implements Serializable {
 
     public List<Job> getJobs() {
         return jobs;
+    }
+
+    private static String nonNullString(String mayBeNull) {
+        return Objects.nonNull(mayBeNull) ? mayBeNull : "";
     }
 
     @Override
@@ -60,26 +64,28 @@ public class Organization implements Serializable {
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Job implements Serializable {
 
-        private String jobName;
+        private String name;
         @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate startDate;
         @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate finishDate;
-        private String jobDescription;
+        private String description;
 
-        public Job() {}
-        public Job(String jobName, LocalDate startDate, LocalDate finishDate, String jobDescription) {
-            Objects.requireNonNull(jobName, "jobName must be no null");
-            Objects.requireNonNull(startDate, "startDate must be no null");
-            Objects.requireNonNull(finishDate, "finishDate must be no null");
-            this.jobName = jobName;
-            this.startDate = startDate;
-            this.finishDate = finishDate;
-            this.jobDescription = jobDescription;
+        public Job() {
         }
 
-        public String getJobName() {
-            return jobName;
+        public Job(String name, LocalDate startDate, LocalDate finishDate, String description) {
+            Objects.requireNonNull(name, "Job name must be no null");
+            Objects.requireNonNull(startDate, "startDate must be no null");
+            Objects.requireNonNull(finishDate, "finishDate must be no null");
+            this.name = name;
+            this.startDate = startDate;
+            this.finishDate = finishDate;
+            this.description = nonNullString(description);
+        }
+
+        public String getName() {
+            return name;
         }
 
         public LocalDate getStartDate() {
@@ -90,8 +96,8 @@ public class Organization implements Serializable {
             return finishDate;
         }
 
-        public String getJobDescription() {
-            return jobDescription;
+        public String getDescription() {
+            return description;
         }
 
         @Override
@@ -99,24 +105,24 @@ public class Organization implements Serializable {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Job job = (Job) o;
-            return jobName.equals(job.jobName) &&
+            return name.equals(job.name) &&
                     startDate.equals(job.startDate) &&
                     finishDate.equals(job.finishDate) &&
-                    jobDescription.equals(job.jobDescription);
+                    description.equals(job.description);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(jobName, startDate, finishDate, jobDescription);
+            return Objects.hash(name, startDate, finishDate, description);
         }
 
         @Override
         public String toString() {
             return "Job{" +
-                    "jobName='" + jobName + '\'' +
+                    "jobName='" + name + '\'' +
                     ", startDate=" + startDate +
                     ", finishDate=" + finishDate +
-                    ", jobDescription='" + jobDescription + '\'' +
+                    ", jobDescription='" + description + '\'' +
                     '}';
         }
     }
