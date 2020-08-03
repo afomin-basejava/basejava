@@ -4,7 +4,6 @@ import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
 import com.urise.webapp.model.ContactType;
 import com.urise.webapp.model.Resume;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -49,8 +48,9 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void get() {
-        assertGet(RESUME_GRIGORY_KISLIN);
-        assertGet(RESUME_2);
+        for (Resume resume : Arrays.asList(RESUME_GRIGORY_KISLIN, RESUME_2)) {
+            assertGet(resume);
+        }
         storage.save(RESUME_3);
         assertGet(RESUME_3);
     }

@@ -21,12 +21,13 @@ public class Organization implements Serializable {
 
     }
     public Organization(String name, List<Job> jobs) {
-        this(name, "", jobs);
+        this.name = name;
+        this.jobs = jobs;
     }
 
     public Organization(String name, String url, List<Job> jobs) {
         this.name = name;
-        this.url = nonNullString(url);
+        this.url = url;
         this.jobs = jobs;
     }
 
@@ -42,17 +43,13 @@ public class Organization implements Serializable {
         return jobs;
     }
 
-    private static String nonNullString(String mayBeNull) {
-        return Objects.nonNull(mayBeNull) ? mayBeNull : "";
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Organization)) return false;
         Organization that = (Organization) o;
         return getName().equals(that.getName()) &&
-                getUrl().equals(that.getUrl()) &&
+                Objects.equals(getUrl(), that.getUrl()) &&
                 Objects.equals(getJobs(), that.getJobs());
     }
 
@@ -81,7 +78,7 @@ public class Organization implements Serializable {
             this.name = name;
             this.startDate = startDate;
             this.finishDate = finishDate;
-            this.description = nonNullString(description);
+            this.description = description;
         }
 
         public String getName() {
@@ -108,7 +105,7 @@ public class Organization implements Serializable {
             return name.equals(job.name) &&
                     startDate.equals(job.startDate) &&
                     finishDate.equals(job.finishDate) &&
-                    description.equals(job.description);
+                    Objects.equals(description, job.description);
         }
 
         @Override

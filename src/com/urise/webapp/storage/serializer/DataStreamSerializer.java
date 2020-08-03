@@ -5,9 +5,13 @@ import com.urise.webapp.model.*;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class DataStreamSerializer implements StreamSerializer {
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
     @Override
     public void doWrite(Resume resume, OutputStream file) throws IOException {
         try (final DataOutputStream dos = new DataOutputStream(file)) {
@@ -18,8 +22,45 @@ public class DataStreamSerializer implements StreamSerializer {
                 dos.writeUTF(String.valueOf(entry.getValue()));
             });
             writeCollection(resume.getSections().entrySet(), dos, entry -> {
+                SectionType sectionType = entry.getKey();
                 dos.writeUTF(entry.getKey().name());
-                dos.writeUTF(String.valueOf(entry.getValue()));
+                switch (sectionType) {
+                    case OBJECTIVE:
+                    case PERSONAL:
+                        dos.writeUTF(String.valueOf(entry.getValue()));
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        writeCollection(((ListSection) entry.getValue()).getListSection(), dos, dos::writeUTF);
+                        break;
+                    case EDUCATION:
+                    case EXPIRIENCE:
+                        writeCollection(((OrganizationSection) entry.getValue()).getOrganizations(), dos, organization -> {
+                            dos.writeUTF(organization.getName());
+                            dos.writeUTF(organization.getUrl() == null ? "empty" : organization.getUrl());
+                            writeCollection(organization.getJobs(), dos, job -> {
+                                dos.writeUTF(job.getName());
+                                dos.writeUTF(job.getStartDate().format(dtf));
+                                dos.writeUTF(job.getFinishDate().format(dtf));
+                                dos.writeUTF(job.getDescription() == null ? "empty" : job.getDescription());
+                            });
+                        });
+        //                dos.writeInt(((OrganizationSection) entry.getValue()).getOrganizations().size());
+        //                for (Organization organization : ((OrganizationSection) entry.getValue()).getOrganizations()) {
+        //                    dos.writeUTF(organization.getName());
+        //                    dos.writeUTF(organization.getUrl() == null ? "empty" : organization.getUrl());
+        //                    dos.writeInt(organization.getJobs().size());
+        //                    for (Organization.Job job : organization.getJobs()) {
+        //                        dos.writeUTF(job.getName());
+        //                        dos.writeUTF(job.getStartDate().format(dtf));
+        //                        dos.writeUTF(job.getFinishDate().format(dtf));
+        //                        dos.writeUTF(job.getDescription() == null ? "empty" : job.getDescription());
+        //                    }
+        //                }
+                        break;
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + sectionType);
+                }
             });
         }
     }
@@ -30,10 +71,38 @@ public class DataStreamSerializer implements StreamSerializer {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
-            readElements(dis, () -> resume.setContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
-            readElements(dis, () -> {
+            readResumePartitions(dis, () -> {
+                ContactType contactType = ContactType.valueOf(dis.readUTF());
+                resume.setContact(contactType, dis.readUTF());
+            });
+            readResumePartitions(dis, () -> {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
-                resume.setSection(sectionType, readSection(dis, sectionType));
+                AbstractSection result;
+                switch (sectionType) {
+                    case OBJECTIVE:
+                    case PERSONAL:
+                        result = new TextSection(dis.readUTF());
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        result = new ListSection(readList(dis, dis::readUTF));
+                        break;
+                    case EDUCATION:
+                    case EXPIRIENCE:
+                        result = new OrganizationSection(
+                                readList(dis,
+                                        () -> new Organization(dis.readUTF(), readStringUTF(dis),
+                                                readList(dis,
+                                                        () -> new Organization.Job(dis.readUTF(), readLocalDate(dis), readLocalDate(dis), readStringUTF(dis))
+                                                )
+                                        )
+                                )
+                        );
+                        break;
+                    default:
+                            throw new IllegalStateException("Unexpected value: " + sectionType);
+                }
+                resume.setSection(sectionType, result);
             });
             return resume;
         }
@@ -50,53 +119,38 @@ public class DataStreamSerializer implements StreamSerializer {
         void writeCollectionElement(T element) throws IOException;
     }
 
-    private void readElements(DataInputStream dis, ReadElement re) throws IOException {
+
+    private void readResumePartitions(DataInputStream dis, ReadResumePartition re) throws IOException {
         int size = dis.readInt();           // EnumMaps size
         for (int i = 0; i < size; i++) {
-            re.readElement();
+            re.readPartition();
         }
     }
 
-    private interface ReadElement {
-        void readElement() throws IOException;
+    private interface ReadResumePartition {
+        void readPartition() throws IOException;
     }
 
-    private AbstractSection readSection(DataInputStream dis, SectionType sectionType) throws IOException {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String[] sectionAsStringArray = dis.readUTF().split("\n");
-        switch (sectionType) {
-            case OBJECTIVE:
-            case PERSONAL:
-                return new TextSection(sectionAsStringArray[0]);
-            case ACHIEVEMENT:
-            case QUALIFICATIONS:
-                return new ListSection(new ArrayList<>(Arrays.asList(sectionAsStringArray)));
-            case EDUCATION:
-            case EXPIRIENCE:
-                List<Organization> organizations = new ArrayList<>();
-                int index = 0;
-                int numberOfOrganization = Integer.parseInt(sectionAsStringArray[index++]);
-                for (int organizationNumber = 0; organizationNumber < numberOfOrganization; organizationNumber++) {
-                    List<Organization.Job> jobs = new ArrayList<>();
-                    String organ = sectionAsStringArray[index++];
-                    String url = sectionAsStringArray[index++];
-                    int numberOfJobs = Integer.parseInt(sectionAsStringArray[index++]);
-                    for (int jobNumber = 0; jobNumber < numberOfJobs; jobNumber++) {
-                        LocalDate startDate = LocalDate.parse(sectionAsStringArray[index++], dtf);
-                        LocalDate finishDate = LocalDate.parse(sectionAsStringArray[index++], dtf);
-                        String name = sectionAsStringArray[index++];
-                        String description = sectionAsStringArray[index++];
-                        if (description.equals("empty")) {
-                            description = "";
-                        }
-                        jobs.add(new Organization.Job(name, startDate, finishDate, description));
-                    }
-                    organizations.add(new Organization(organ, url, jobs));
-                }
-                return new OrganizationSection(organizations);
-            default:
-                throw new IllegalStateException("Unexpected value: " + sectionType);
+    private LocalDate readLocalDate(DataInputStream dis) throws IOException {
+        return LocalDate.parse(dis.readUTF(), dtf);
+    }
+
+    private String readStringUTF(DataInputStream dis) throws IOException {
+        String url = dis.readUTF();
+        if (url.equals("empty")) url = null;
+        return url;
+    }
+
+    private <T> List<T> readList(DataInputStream dis, ReadListElement<T> rle) throws IOException {
+        List<T> list = new ArrayList<>();
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            list.add(rle.readListElement());
         }
+        return list;
     }
 
+    interface ReadListElement<T> {
+        T readListElement() throws IOException;
+    }
 }

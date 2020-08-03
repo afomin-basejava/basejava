@@ -60,12 +60,12 @@ public class ResumeTestData {
                 "Родной русский, английский \"upper intermediate\"")));
         RESUME_SECTIONS.put(SectionType.EDUCATION, new OrganizationSection(
                         Arrays.asList(
-                                new Organization("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", null,
+                                new Organization("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", "http://www.ifmo.ru",
                                         Arrays.asList(
                                                 new Organization.Job("Аспирантура (программист С, С++)",
                                                         LocalDate.parse("1993-09", DateUtil.dateFormatter()),
                                                         LocalDate.parse("1997-09", DateUtil.dateFormatter()),
-                                                        "")
+                                                        null)
                                                 ,
                                                 new Organization.Job("Инженер (программист Fortran, C)",
                                                         LocalDate.parse("1987-09", DateUtil.dateFormatter()),
@@ -78,7 +78,7 @@ public class ResumeTestData {
                                                 new Organization.Job("Закончил с отличием",
                                                         LocalDate.parse("1987-09", DateUtil.dateFormatter()),
                                                         LocalDate.parse("1993-09", DateUtil.dateFormatter()),
-                                                        null)
+                                                        "nonNullJobDescription")
                                         )
                                 )
                         )
@@ -87,7 +87,7 @@ public class ResumeTestData {
         RESUME_SECTIONS.put(SectionType.EXPIRIENCE, new OrganizationSection(
                 Arrays.asList(
                         new Organization(
-                                "Java Online Projects", "http://javaops.ru/",
+                                "Java Online Projects", null,
                                 Arrays.asList(
                                         new Organization.Job(
                                                 "Автор проекта",
@@ -117,7 +117,6 @@ public class ResumeTestData {
         RESUME_2 = ResumeTestData.createResume(UUID_2, FULL_NAME_2, RESUME_CONTACTS, RESUME_SECTIONS);
 
         RESUME_CONTACTS = new EnumMap<>(ContactType.class);
-        RESUME_SECTIONS = new EnumMap<>(SectionType.class);
         RESUME_CONTACTS.put(ContactType.EMAIL, "mailto:uuid3@yandex.ru");
         RESUME_CONTACTS.put(ContactType.RESIDENCE, "Moscow");
         RESUME_CONTACTS.put(ContactType.PHONE, "+7(495)123-45-67");
