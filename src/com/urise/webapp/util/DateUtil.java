@@ -7,6 +7,7 @@ import java.time.temporal.ChronoField;
 
 public class DateUtil {
     public static final LocalDate NOW = LocalDate.ofEpochDay(0);
+
     public static DateTimeFormatter dateFormatter() {
         return new DateTimeFormatterBuilder()
                 .appendPattern("yyyy-MM")
