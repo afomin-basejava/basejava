@@ -45,19 +45,7 @@ public class DataStreamSerializer implements StreamSerializer {
                                 dos.writeUTF(job.getDescription() == null ? "empty" : job.getDescription());
                             });
                         });
-        //                dos.writeInt(((OrganizationSection) entry.getValue()).getOrganizations().size());
-        //                for (Organization organization : ((OrganizationSection) entry.getValue()).getOrganizations()) {
-        //                    dos.writeUTF(organization.getName());
-        //                    dos.writeUTF(organization.getUrl() == null ? "empty" : organization.getUrl());
-        //                    dos.writeInt(organization.getJobs().size());
-        //                    for (Organization.Job job : organization.getJobs()) {
-        //                        dos.writeUTF(job.getName());
-        //                        dos.writeUTF(job.getStartDate().format(dtf));
-        //                        dos.writeUTF(job.getFinishDate().format(dtf));
-        //                        dos.writeUTF(job.getDescription() == null ? "empty" : job.getDescription());
-        //                    }
-        //                }
-                        break;
+                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + sectionType);
                 }
