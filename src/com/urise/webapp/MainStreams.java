@@ -19,6 +19,8 @@ public class MainStreams {
     }
 
     private static List<Integer> oddOrEven(List<Integer> integers) {
+//  реализовать метод List<Integer> oddOrEven(List<Integer> integers) если сумма всех чисел нечетная - УДАЛИТЬ все нечетные,
+//  если четная - УДАЛИТЬ все четные. Сложность алгоритма должна быть O(N). Optional - решение в один стрим.
         Map<Boolean, List<Integer>> oddOreven = integers.stream()
                 .collect(Collectors.partitioningBy(integer -> integer % 2 == 0));
         List<Integer> odds = oddOreven.get(false);
