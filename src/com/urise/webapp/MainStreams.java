@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class HW12Methods {
+public class MainStreams {
     private static final int MIN_VALUE = minValue(new int[]{1, 2, 3, 3, 3, 2, 2, 1, 1, 9, 8, 6, 9, 9, });
-    public static final List<Integer> ODD_ORR_EVEN = oddOrEven(Arrays.asList(1, 1, 2, 4, 9, 77, 1, 1, 987, 0));
+    private static final List<Integer> ODD_ORR_EVEN = oddOrEven(Arrays.asList(1, 3, 5, 2));
 
     public static void main(String[] args) {
         System.out.println(MIN_VALUE);
@@ -22,6 +22,6 @@ public class HW12Methods {
         Map<Boolean, List<Integer>> oddOreven = integers.stream()
                 .collect(Collectors.partitioningBy(integer -> integer % 2 == 0));
         List<Integer> odds = oddOreven.get(false);
-        return odds.size() % 2 == 1 ? odds : oddOreven.get(true);
+        return odds.size() % 2 == 1 ? oddOreven.get(true) : odds;
     }
 }
