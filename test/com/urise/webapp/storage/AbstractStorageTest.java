@@ -1,8 +1,8 @@
 package com.urise.webapp.storage;
 
+import com.urise.webapp.Config;
 import com.urise.webapp.exception.ExistStorageException;
 import com.urise.webapp.exception.NotExistStorageException;
-import com.urise.webapp.model.ContactType;
 import com.urise.webapp.model.Resume;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +13,8 @@ import static com.urise.webapp.storage.ResumeTestData.*;
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractStorageTest {
-    protected static final String RESUME_STORAGE_DIRECTORY = "D:\\basejava\\storage";
+//    protected static final String RESUME_STORAGE_DIRECTORY = "D:\\basejava\\storage";
+    protected static final String RESUME_STORAGE_DIRECTORY = String.valueOf(Config.getINSTANCE().getStorageDir());
 
     private final Storage storage;
 
@@ -24,7 +25,7 @@ public abstract class AbstractStorageTest {
     @Before
     public void fillStorage() {
         storage.clear();
-        storage.save(RESUME_GRIGORY_KISLIN);
+        storage.save(RESUME_1);
         storage.save(RESUME_2);
     }
 
@@ -43,12 +44,12 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = ExistStorageException.class)
     public void saveExistingResume() {
-        storage.save(RESUME_GRIGORY_KISLIN);
+        storage.save(RESUME_1);
     }
 
     @Test
     public void get() {
-        for (Resume resume : Arrays.asList(RESUME_GRIGORY_KISLIN, RESUME_2)) {
+        for (Resume resume : Arrays.asList(RESUME_1, RESUME_2)) {
             assertGet(resume);
         }
         storage.save(RESUME_3);
@@ -62,7 +63,7 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void delete() {
-        storage.delete(RESUME_GRIGORY_KISLIN.getUuid());
+        storage.delete(RESUME_1.getUuid());
         assertSize(1);
         storage.delete(RESUME_2.getUuid());
         assertSize(0);
@@ -78,7 +79,8 @@ public abstract class AbstractStorageTest {
     @Test
     public void update() {
         Resume resume = RESUME_2;
-        RESUME_2.setContact(ContactType.LINKEDIN, "LINKEDIN");
+//        RESUME_2.setContact(ContactType.LINKEDIN, "LINKEDIN");
+        RESUME_2.setFullName(RESUME_2.getFullName() + "-updated");
         storage.update(resume);
         assertGet(resume);
     }
@@ -90,7 +92,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void getAllSorted() {
-        assertEquals(storage.getAllSorted(), Arrays.asList(RESUME_2, RESUME_GRIGORY_KISLIN));
+        assertEquals(storage.getAllSorted(), Arrays.asList(RESUME_2, RESUME_1));
     }
 
     @Test
