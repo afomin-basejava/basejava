@@ -84,7 +84,7 @@ public class ResumeTestData {
                         )
                 )
         );
-        RESUME_SECTIONS.put(SectionType.EXPIRIENCE, new OrganizationSection(
+        RESUME_SECTIONS.put(SectionType.EXPERIENCE, new OrganizationSection(
                 Arrays.asList(
                         new Organization(
                                 "Java Online Projects", null,

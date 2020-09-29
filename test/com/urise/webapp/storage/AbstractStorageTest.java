@@ -13,7 +13,6 @@ import static com.urise.webapp.storage.ResumeTestData.*;
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractStorageTest {
-//    protected static final String RESUME_STORAGE_DIRECTORY = "D:\\basejava\\storage";
     protected static final String RESUME_STORAGE_DIRECTORY = String.valueOf(Config.getINSTANCE().getStorageDir());
 
     private final Storage storage;
@@ -67,7 +66,7 @@ public abstract class AbstractStorageTest {
         assertSize(1);
         storage.delete(RESUME_2.getUuid());
         assertSize(0);
-        storage.get(RESUME_2.getUuid());
+        storage.get(RESUME_2.getUuid()); /* SqlStorage get(...) - see if (!resultSet.next())...NotExistStorageException */
     }
 
     @Test(expected = NotExistStorageException.class)

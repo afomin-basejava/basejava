@@ -51,7 +51,6 @@ public class FileStorage extends AbstractStorage<File> {
     }
     @Override
     protected Resume doGet(File file) {
-        Resume resume = null;
         try {
             return streamSerializer.doRead(newInputStream(file.toPath()));
         } catch (IOException | ClassNotFoundException e) {

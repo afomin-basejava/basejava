@@ -6,7 +6,7 @@ import java.util.*;
 
 public class MapUuidStorage extends AbstractStorage<String> {
 
-    private Map<String, Resume> map = new HashMap<>();
+    private final Map<String, Resume> map = new HashMap<>();
 
     @Override
     public void clear() {

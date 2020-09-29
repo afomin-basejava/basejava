@@ -34,7 +34,7 @@ public class DataStreamSerializer implements StreamSerializer {
                         writeCollection(((ListSection) entry.getValue()).getListSection(), dos, dos::writeUTF);
                         break;
                     case EDUCATION:
-                    case EXPIRIENCE:
+                    case EXPERIENCE:
                         writeCollection(((OrganizationSection) entry.getValue()).getOrganizations(), dos, organization -> {
                             dos.writeUTF(organization.getName());
                             dos.writeUTF(organization.getUrl() == null ? "empty" : organization.getUrl());
@@ -76,7 +76,7 @@ public class DataStreamSerializer implements StreamSerializer {
                         result = new ListSection(readList(dis, dis::readUTF));
                         break;
                     case EDUCATION:
-                    case EXPIRIENCE:
+                    case EXPERIENCE:
                         result = new OrganizationSection(
                                 readList(dis,
                                         () -> new Organization(dis.readUTF(), readStringUTF(dis),
