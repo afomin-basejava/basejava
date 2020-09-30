@@ -20,17 +20,14 @@ public class SqlHelper {
         ) {
             return eps.executePreparedStatement(preparedStatement);
         } catch (SQLException e) {
-            throw getTypeOfStorageException(e, sqlStatement);
+            throw getTypeOfStorageException(e);
         }
     }
 
-    private StorageException getTypeOfStorageException(SQLException e, String uuid) {
-        switch (e.getSQLState()) {
-            case "23505":
-                return new ExistStorageException(uuid);
-            case "others":
-            default:
-                return new StorageException(e.getMessage() + " : " + uuid);
+    private StorageException getTypeOfStorageException(SQLException e) {
+        if (e.getSQLState().equals("23505")) {
+            return new ExistStorageException(e.getMessage());
         }
+        return new StorageException(e);
     }
 }

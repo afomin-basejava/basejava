@@ -7,24 +7,21 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.UUID;
 
 import static com.urise.webapp.util.DateUtil.NOW;
 
 public class ResumeTestData {
-    public static void main(String[] args) {
-        Resume resume = createResume("uuid1", "Григорий Кислин");
-        printResume(resume);
-    }
 
-    private static final String UUID_1 = "uuid_1";
+    private static final String UUID_1 = UUID.randomUUID().toString();
     private static final String FULL_NAME_1 = "Grigory Kislin";
     static final Resume RESUME_1;
 
-    private static final String UUID_2 = "uuid_2";
+    private static final String UUID_2 = UUID.randomUUID().toString();
     private static final String FULL_NAME_2 = "FULL_NAME_2";
     static final Resume RESUME_2;
 
-    private static final String UUID_3 = "uuid_3";
+    private static final String UUID_3 = UUID.randomUUID().toString();
     private static final String FULL_NAME_3 = "FULL_NAME_3";
     static final Resume RESUME_3;
 
