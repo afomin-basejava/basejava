@@ -15,9 +15,7 @@ public class SqlHelper {
     }
 
     public <T> T executePreparedStatement(String sqlStatement, PreparedStatementExecutor<T> eps) {
-        try (
-                PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)
-        ) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sqlStatement)) {
             return eps.executePreparedStatement(preparedStatement);
         } catch (SQLException e) {
             throw getTypeOfStorageException(e);
@@ -26,7 +24,7 @@ public class SqlHelper {
 
     private StorageException getTypeOfStorageException(SQLException e) {
         if (e.getSQLState().equals("23505")) {
-            return new ExistStorageException(e.getMessage());
+            return new ExistStorageException(e);
         }
         return new StorageException(e);
     }

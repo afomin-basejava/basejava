@@ -20,9 +20,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public void clear() {
-        sqlHelper.executePreparedStatement(
-                "DELETE FROM resume",
-                PreparedStatement::execute);
+        sqlHelper.executePreparedStatement("DELETE FROM resume", PreparedStatement::execute);
     }
 
     @Override
@@ -80,12 +78,12 @@ public class SqlStorage implements Storage {
     public List<Resume> getAllSorted() {
         return sqlHelper.executePreparedStatement(
                 "SELECT * FROM resume ORDER BY full_name, uuid", eps -> {
-                    List<Resume> list = new ArrayList<>();
+                    List<Resume> resumes = new ArrayList<>();
                     ResultSet resultSet = eps.executeQuery();
                     while (resultSet.next()) {
-                        list.add(new Resume(resultSet.getString("uuid"), resultSet.getString("full_name")));
+                        resumes.add(new Resume(resultSet.getString("uuid"), resultSet.getString("full_name")));
                     }
-                    return list;
+                    return resumes;
                 });
     }
 
