@@ -25,13 +25,17 @@ public class SqlStorage implements Storage {
 
     @Override
     public void save(Resume resume) {
+        int[] affectedRows = new int[1];
         sqlHelper.executePreparedStatement(
                 "INSERT INTO resume VALUES (?, ?)",
                 eps -> {
                     eps.setString(1, resume.getUuid());
                     eps.setString(2, resume.getFullName());
-                    return eps.executeUpdate();
+                    affectedRows[0] = eps.executeUpdate();
+                    return affectedRows[0];
                 });
+//        System.out.println(affectedRows[0]);
+        return;
     }
 
     @Override
