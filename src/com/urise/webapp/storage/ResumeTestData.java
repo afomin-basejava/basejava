@@ -96,7 +96,7 @@ public class ResumeTestData {
                         )
                 )
         ));
-        RESUME_1 = ResumeTestData.createResume(UUID_1, FULL_NAME_1/*, RESUME_CONTACTS, RESUME_SECTIONS*/);
+        RESUME_1 = ResumeTestData.createResume(UUID_1, FULL_NAME_1, RESUME_CONTACTS/*, RESUME_SECTIONS*/);
 
         RESUME_CONTACTS = new EnumMap<>(ContactType.class);
         RESUME_SECTIONS = new EnumMap<>(SectionType.class);
@@ -111,13 +111,13 @@ public class ResumeTestData {
         RESUME_SECTIONS.put(SectionType.QUALIFICATIONS, new ListSection(Arrays.asList(
                 "QUALIFICATIONS",
                 "Родной русский, английский \"upper intermediate\"")));
-        RESUME_2 = ResumeTestData.createResume(UUID_2, FULL_NAME_2/*, RESUME_CONTACTS, RESUME_SECTIONS*/);
+        RESUME_2 = ResumeTestData.createResume(UUID_2, FULL_NAME_2, RESUME_CONTACTS/*, RESUME_SECTIONS*/);
 
         RESUME_CONTACTS = new EnumMap<>(ContactType.class);
         RESUME_CONTACTS.put(ContactType.EMAIL, "mailto:uuid3@yandex.ru");
         RESUME_CONTACTS.put(ContactType.RESIDENCE, "Moscow");
         RESUME_CONTACTS.put(ContactType.PHONE, "+7(495)123-45-67");
-        RESUME_3 = ResumeTestData.createResume(UUID_3, FULL_NAME_3/*, RESUME_CONTACTS*/);
+        RESUME_3 = ResumeTestData.createResume(UUID_3, FULL_NAME_3, RESUME_CONTACTS);
 
     }
 

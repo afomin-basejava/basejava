@@ -85,7 +85,7 @@ public class Resume implements Serializable {
 
     @Override
     public String toString() {
-        return uuid + " - " + fullName;
+        return uuid + " - " + fullName;// + " " + getContacts();
     }
 
     @Override
@@ -93,10 +93,10 @@ public class Resume implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Resume resume = (Resume) o;
-        return getUuid().equals(resume.getUuid()) &&
-                getFullName().equals(resume.getFullName()) &&
-                getContacts().equals(resume.getContacts()) &&
-                getSections().equals(resume.getSections());
+        return  Objects.equals(getUuid(),resume.getUuid()) &&
+                Objects.equals(getFullName(),resume.getFullName()) &&
+                Objects.equals(getContacts(),resume.getContacts()) &&
+                Objects.equals(getSections(),resume.getSections());
     }
 
     @Override
