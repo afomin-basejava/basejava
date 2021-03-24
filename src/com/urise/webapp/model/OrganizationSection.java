@@ -39,38 +39,38 @@ public class OrganizationSection extends AbstractSection {
         return Objects.hash(organizations);
     }
 
-    @Override
-    public String toString() {
-        return "OrganizationSection{" +
-                "organizations=" + organizations +
-                '}';
-    }
-
-
 //    @Override
 //    public String toString() {
-//        StringBuilder stringBuilder = new StringBuilder();
-//        stringBuilder.append(organizations.size()).append("\n");
-//        for (Organization organization : organizations) {
-//            String orgName = organization.getName();
-//            stringBuilder.append(orgName).append("\n");
-//            String url = organization.getUrl();
-//            stringBuilder.append(url).append("\n");
-//            stringBuilder.append(organization.getJobs().size()).append("\n");
-//            for (Organization.Job job : organization.getJobs()) {
-//                stringBuilder
-//                    .append(job.getStartDate())
-//                    .append("\n")
-//                    .append(job.getFinishDate())
-//                    .append("\n")
-//                    .append(job.getName())
-//                    .append("\n")
-//                    .append(job.getDescription().isEmpty() ? "empty" : job.getDescription())
-//                    .append("\n")
-//                ;
-//            }
-//        }
-//        return stringBuilder.toString();
+//        return "OrganizationSection{" +
+//                "organizations=" + organizations +
+//                '}';
 //    }
+
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(organizations.size()).append("\n");
+        for (Organization organization : organizations) {
+            String orgName = organization.getName();
+            stringBuilder.append(orgName).append("\n");
+            String url = organization.getUrl();
+            stringBuilder.append(url).append("\n");
+            stringBuilder.append(organization.getJobs().size()).append("\n");
+            for (Organization.Job job : organization.getJobs()) {
+                stringBuilder
+                    .append(job.getStartDate())
+                    .append("\n")
+                    .append(job.getFinishDate())
+                    .append("\n")
+                    .append(job.getName())
+                    .append("\n")
+                    .append(((job.getDescription() == null) || job.getDescription().isEmpty()) ? "empty" : job.getDescription())
+                    .append("\n")
+                ;
+            }
+        }
+        return stringBuilder.toString();
+    }
 
 }
