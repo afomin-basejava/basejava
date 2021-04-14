@@ -122,15 +122,6 @@ public class SqlStorage implements Storage {
         }
     }
 
-    private void deleteContacts(Resume resume, Connection connection) throws SQLException {
-        try (PreparedStatement eps = connection.prepareStatement("DELETE FROM contact c WHERE c.resume_uuid = ?")) {
-            eps.setString(1, resume.getUuid());
-            if (eps.executeUpdate() == 0) {
-                throw new NotExistStorageException("contacts delete(): " + resume.getUuid());
-            }
-        }
-    }
-
     private void insertSections(Resume resume, Connection connection) throws SQLException {
         try (PreparedStatement eps = connection.prepareStatement("INSERT INTO section (resume_uuid, type, value) VALUES (?, ?, ?)")) {
             for (Map.Entry<SectionType, AbstractSection> entry : resume.getSections().entrySet()) {
@@ -143,11 +134,19 @@ public class SqlStorage implements Storage {
         }
     }
 
+    private void deleteContacts(Resume resume, Connection connection) throws SQLException {
+        deleteResumePartition(resume, connection, "DELETE FROM contact c WHERE c.resume_uuid = ?");
+    }
+
     private void deleteSections(Resume resume, Connection connection) throws SQLException {
-        try (PreparedStatement eps = connection.prepareStatement("DELETE FROM section c WHERE c.resume_uuid = ?")) {
+        deleteResumePartition(resume, connection, "DELETE FROM section c WHERE c.resume_uuid = ?");
+    }
+
+    private void deleteResumePartition(Resume resume, Connection connection, String sql) throws SQLException {
+        try (PreparedStatement eps = connection.prepareStatement(sql)) {
             eps.setString(1, resume.getUuid());
             if (eps.executeUpdate() == 0) {
-                throw new NotExistStorageException("sections delete(): " + resume.getUuid());
+                throw new NotExistStorageException(sql + " " + resume.getUuid());
             }
         }
     }
@@ -176,14 +175,12 @@ public class SqlStorage implements Storage {
         final List<Resume> resumes = new ArrayList<>();
         try (PreparedStatement selectResumes = connection.prepareStatement("SELECT * FROM resume ORDER BY full_name, uuid")) {
             ResultSet resumesResultSet = selectResumes.executeQuery();
-            if (!resumesResultSet.next())
-                throw new NotExistStorageException("getAllSorted()");
-            do {
+            while (resumesResultSet.next()) {
                 resumes.add(prepareResume(connection,
                             new Resume(resumesResultSet.getString("uuid"),
                             resumesResultSet.getString(2)))
                 );
-            } while (resumesResultSet.next());
+            }
         }
         return resumes;
     }

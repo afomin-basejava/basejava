@@ -11,17 +11,9 @@ import java.util.Properties;
 public class Config {
     protected static final File PROPS = new File(getHomeDir(), "config\\resumes.properties");
 
-    private static File getHomeDir() {
-        File homeDir = new File(System.getProperty("homeDir") == null ? "." : System.getProperty("homeDir"));
-        if (!homeDir.isDirectory()) {
-            throw new IllegalStateException("Illegal directory: " + homeDir);
-        }
-        return homeDir;
-    }
-
     private static final Config INSTANCE = new Config();
-    private final File storageDir;
 
+    private final File storageDir;
     private final Storage sqlStorage;
 
     public static Config getINSTANCE() {
@@ -46,6 +38,14 @@ public class Config {
 
     public Storage getSqlStorage() {
         return sqlStorage;
+    }
+
+    private static File getHomeDir() {
+        File homeDir = new File(System.getProperty("homeDir") == null ? "." : System.getProperty("homeDir"));
+        if (!homeDir.isDirectory()) {
+            throw new IllegalStateException("Illegal directory: " + homeDir);
+        }
+        return homeDir;
     }
 
 }
